@@ -237,6 +237,13 @@ function buildHistory(variants: Variant[], now: number) {
 }
 
 /** `now` defaults to the moment of seeding so demo history is always recent. */
+/**
+ * Bump when the seeded catalogue, pricing or settings change. A persisted
+ * store carrying a different version is replaced on the next boot, so a
+ * redeploy can never serve data from an older seed.
+ */
+export const SEED_VERSION = 2;
+
 export function buildDatabase(now = Date.now()): Database {
   const { products, variants } = buildCatalog();
   const history = buildHistory(variants, now);
@@ -258,6 +265,7 @@ export function buildDatabase(now = Date.now()): Database {
   }));
 
   return {
+    version: SEED_VERSION,
     users: buildUsers(),
     categories: CATEGORIES,
     products,

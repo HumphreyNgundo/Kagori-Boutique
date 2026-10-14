@@ -230,6 +230,8 @@ export interface HydratedLine {
 }
 
 export interface Database {
+  /** Bumped when the seed itself changes; a mismatch re-seeds the store. */
+  version: number;
   users: User[];
   categories: Category[];
   products: Product[];

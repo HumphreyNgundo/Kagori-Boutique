@@ -1,6 +1,6 @@
 import "server-only";
 import type { Database } from "@/lib/types";
-import { buildDatabase } from "@/lib/seed";
+import { buildDatabase, SEED_VERSION } from "@/lib/seed";
 import { selectDriver, type PersistenceDriver } from "@/lib/db/driver";
 
 /**
@@ -28,7 +28,9 @@ export const driver: PersistenceDriver = selectDriver();
 
 async function hydrate(): Promise<Database> {
   const loaded = await driver.load();
-  if (loaded) return loaded;
+  // Stale snapshots from an older seed are discarded rather than merged —
+  // partial shapes would surface as missing fields all over the UI.
+  if (loaded && loaded.version === SEED_VERSION) return loaded;
   const seeded = buildDatabase();
   await driver.save(seeded);
   return seeded;
@@ -51,7 +53,8 @@ export async function read(): Promise<Database> {
 
 /** Bypasses the cache — used before every mutation. */
 export async function readFresh(): Promise<Database> {
-  const db = (await driver.load()) ?? buildDatabase();
+  const loaded = await driver.load();
+  const db = loaded && loaded.version === SEED_VERSION ? loaded : buildDatabase();
   cache.db = db;
   cache.at = Date.now();
   return db;
