@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Plus } from "lucide-react";
 import { PageHeader, Panel, TableWrap, Td, Th } from "@/components/admin/ui";
 import { StockAdjuster } from "@/components/admin/PriceEditor";
 import { requirePermission } from "@/lib/auth/session";
@@ -24,11 +25,16 @@ export default async function InventoryPage({
     <>
       <PageHeader
         title="Inventory"
-        subtitle="Available = on hand minus units held for unpaid orders."
+        subtitle="Available = on hand minus units held for unpaid orders. Open a product to add sizes or remove lines."
         action={
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <Link href="/admin/inventory" className="chip" data-active={!onlyLow}>Everything</Link>
             <Link href="/admin/inventory?filter=low" className="chip" data-active={onlyLow}>Low stock</Link>
+            {mayAdjust && (
+              <Link href="/admin/products/new" className="btn btn-primary btn-sm">
+                <Plus size={14} /> Add a product
+              </Link>
+            )}
           </div>
         }
       />

@@ -3,7 +3,12 @@ import { read, write } from "@/lib/db";
 import { randomId } from "@/lib/ids";
 import { availableOf } from "@/lib/repo/catalog";
 import { OPEN_STATUSES } from "@/lib/order-status";
-import type { StoreSettings, User } from "@/lib/types";
+import type { AuditLog, Database, ProductFamily, StoreSettings, User } from "@/lib/types";
+
+function logAudit(db: Database, entry: Omit<AuditLog, "id" | "createdAt">) {
+  db.audit.unshift({ ...entry, id: randomId("aud"), createdAt: new Date().toISOString() });
+  db.audit = db.audit.slice(0, 500);
+}
 
 /* ---------------------------------------------------------- Dashboard */
 
@@ -374,4 +379,335 @@ export async function listProductsForAdmin() {
       };
     })
     .sort((a, b) => a.categoryName.localeCompare(b.categoryName) || a.product.name.localeCompare(b.product.name));
+}
+
+/* --------------------------------------------------- Catalogue CRUD */
+
+/** Option axes offered when a new product is created, per category family. */
+export const FAMILY_AXES: Record<ProductFamily, string[]> = {
+  WIG: ["Length", "Density", "Colour"],
+  WIG_ACCESSORY: ["Size"],
+  LASH: ["Style", "Length"],
+  LASH_ACCESSORY: ["Size"],
+  FOOTWEAR: ["Size", "Colour"],
+  BAG: ["Colour"],
+};
+
+function slugify(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/["']/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 60);
+}
+
+function uniqueSlug(db: Database, base: string): string {
+  const root = base || "product";
+  let slug = root;
+  let n = 2;
+  while (db.products.some((p) => p.slug === slug)) slug = `${root}-${n++}`;
+  return slug;
+}
+
+function makeSku(db: Database, slug: string, options: Record<string, string>): string {
+  const head = slug.split("-").map((part) => part.slice(0, 3).toUpperCase()).join("").slice(0, 9);
+  const tail = Object.values(options).join("-").replace(/[^a-zA-Z0-9]/g, "").toUpperCase().slice(0, 8);
+  const root = `${head}-${tail || "STD"}`;
+  let sku = `${root}-1`;
+  let n = 2;
+  while (db.variants.some((v) => v.sku === sku)) sku = `${root}-${n++}`;
+  return sku;
+}
+
+/** Keeps the denormalised list price in step with the live variants. */
+function recalcBasePrice(db: Database, productId: string) {
+  const product = db.products.find((p) => p.id === productId);
+  if (!product) return;
+  const live = db.variants.filter((v) => v.productId === productId && v.active);
+  if (live.length) product.basePrice = Math.min(...live.map((v) => v.price));
+}
+
+function cleanOptions(options: Record<string, string>): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(options)
+      .map(([k, v]) => [k.trim(), v.trim()])
+      .filter(([k, v]) => k && v),
+  );
+}
+
+export interface NewProductInput {
+  name: string;
+  categoryId: string;
+  summary: string;
+  description: string;
+  tags: string[];
+  featured: boolean;
+  options: Record<string, string>;
+  price: number;
+  stock: number;
+}
+
+export async function createProduct(input: NewProductInput, actor: Pick<User, "id" | "name">) {
+  return write((db) => {
+    const name = input.name.trim();
+    if (name.length < 2) return { ok: false as const, error: "Give the product a name." };
+    if (!db.categories.some((c) => c.id === input.categoryId)) {
+      return { ok: false as const, error: "Choose a category." };
+    }
+    if (!Number.isFinite(input.price) || input.price <= 0) {
+      return { ok: false as const, error: "Enter a selling price." };
+    }
+    if (!Number.isFinite(input.stock) || input.stock < 0) {
+      return { ok: false as const, error: "Enter how many you have in stock." };
+    }
+
+    const slug = uniqueSlug(db, slugify(name));
+    const productId = randomId("prd");
+    const options = cleanOptions(input.options);
+    const now = new Date().toISOString();
+
+    db.products.push({
+      id: productId,
+      categoryId: input.categoryId,
+      slug,
+      name,
+      summary: input.summary.trim(),
+      description: input.description.trim(),
+      basePrice: Math.round(input.price),
+      compareAtPrice: null,
+      tags: input.tags,
+      images: [],
+      featured: input.featured,
+      active: true,
+      createdAt: now,
+    });
+
+    const variantId = randomId("var");
+    db.variants.push({
+      id: variantId,
+      productId,
+      sku: makeSku(db, slug, options),
+      options,
+      price: Math.round(input.price),
+      stock: Math.round(input.stock),
+      reserved: 0,
+      lowStockThreshold: 3,
+      active: true,
+    });
+
+    // Opening stock is a ledger entry like any other, so the numbers reconcile.
+    if (input.stock > 0) {
+      db.movements.unshift({
+        id: randomId("stk"),
+        variantId,
+        delta: Math.round(input.stock),
+        reason: "RESTOCK",
+        reference: "Opening stock",
+        actorName: actor.name,
+        createdAt: now,
+      });
+    }
+
+    logAudit(db, {
+      actorId: actor.id,
+      actorName: actor.name,
+      action: "product.created",
+      entity: "product",
+      entityId: slug,
+      meta: { price: input.price, stock: input.stock },
+    });
+
+    return { ok: true as const, productId, slug };
+  });
+}
+
+export async function updateProductDetails(
+  productId: string,
+  patch: { name: string; categoryId: string; summary: string; description: string; tags: string[]; featured: boolean },
+  actor: Pick<User, "id" | "name">,
+) {
+  return write((db) => {
+    const product = db.products.find((p) => p.id === productId);
+    if (!product) return { ok: false as const, error: "Product not found." };
+    if (patch.name.trim().length < 2) return { ok: false as const, error: "Give the product a name." };
+    if (!db.categories.some((c) => c.id === patch.categoryId)) {
+      return { ok: false as const, error: "Choose a category." };
+    }
+
+    product.name = patch.name.trim();
+    product.categoryId = patch.categoryId;
+    product.summary = patch.summary.trim();
+    product.description = patch.description.trim();
+    product.tags = patch.tags;
+    product.featured = patch.featured;
+    // The slug is deliberately left alone: links already shared must keep working.
+
+    logAudit(db, {
+      actorId: actor.id,
+      actorName: actor.name,
+      action: "product.updated",
+      entity: "product",
+      entityId: product.slug,
+      meta: {},
+    });
+    return { ok: true as const };
+  });
+}
+
+export async function addVariant(
+  productId: string,
+  input: { options: Record<string, string>; price: number; stock: number },
+  actor: Pick<User, "id" | "name">,
+) {
+  return write((db) => {
+    const product = db.products.find((p) => p.id === productId);
+    if (!product) return { ok: false as const, error: "Product not found." };
+    if (!Number.isFinite(input.price) || input.price <= 0) {
+      return { ok: false as const, error: "Enter a selling price." };
+    }
+    if (!Number.isFinite(input.stock) || input.stock < 0) {
+      return { ok: false as const, error: "Enter how many you have in stock." };
+    }
+
+    const options = cleanOptions(input.options);
+    const signature = JSON.stringify(options);
+    const clash = db.variants.find(
+      (v) => v.productId === productId && JSON.stringify(cleanOptions(v.options)) === signature,
+    );
+    if (clash) {
+      return {
+        ok: false as const,
+        error: clash.active
+          ? "That combination already exists — edit its stock instead."
+          : "That combination exists but is retired. Restore it rather than adding a duplicate.",
+      };
+    }
+
+    const variantId = randomId("var");
+    const now = new Date().toISOString();
+    db.variants.push({
+      id: variantId,
+      productId,
+      sku: makeSku(db, product.slug, options),
+      options,
+      price: Math.round(input.price),
+      stock: Math.round(input.stock),
+      reserved: 0,
+      lowStockThreshold: 3,
+      active: true,
+    });
+
+    if (input.stock > 0) {
+      db.movements.unshift({
+        id: randomId("stk"),
+        variantId,
+        delta: Math.round(input.stock),
+        reason: "RESTOCK",
+        reference: "Opening stock",
+        actorName: actor.name,
+        createdAt: now,
+      });
+    }
+
+    recalcBasePrice(db, productId);
+    logAudit(db, {
+      actorId: actor.id,
+      actorName: actor.name,
+      action: "variant.added",
+      entity: "product",
+      entityId: product.slug,
+      meta: { options: Object.values(options).join(" · "), stock: input.stock },
+    });
+    return { ok: true as const };
+  });
+}
+
+/**
+ * Removing stock lines is deliberately two-speed: a variant nobody ever bought
+ * is deleted outright, one with sales history is retired so past orders keep
+ * their line items. Same rule for products.
+ */
+export async function removeVariant(variantId: string, actor: Pick<User, "id" | "name">) {
+  return write((db) => {
+    const variant = db.variants.find((v) => v.id === variantId);
+    if (!variant) return { ok: false as const, error: "Option not found." };
+    if (variant.reserved > 0) {
+      return { ok: false as const, error: "Units are held for open orders — finish or cancel those first." };
+    }
+
+    const siblings = db.variants.filter((v) => v.productId === variant.productId && v.active);
+    if (siblings.length <= 1) {
+      return { ok: false as const, error: "A product needs at least one option. Hide the whole product instead." };
+    }
+
+    const sold = db.orderItems.some((i) => i.variantId === variantId);
+    if (sold) {
+      variant.active = false;
+    } else {
+      db.variants = db.variants.filter((v) => v.id !== variantId);
+      db.movements = db.movements.filter((m) => m.variantId !== variantId);
+    }
+
+    recalcBasePrice(db, variant.productId);
+    const product = db.products.find((p) => p.id === variant.productId);
+    logAudit(db, {
+      actorId: actor.id,
+      actorName: actor.name,
+      action: sold ? "variant.retired" : "variant.deleted",
+      entity: "product",
+      entityId: product?.slug ?? variant.productId,
+      meta: { sku: variant.sku },
+    });
+    return { ok: true as const, retained: sold };
+  });
+}
+
+export async function restoreVariant(variantId: string, actor: Pick<User, "id" | "name">) {
+  return write((db) => {
+    const variant = db.variants.find((v) => v.id === variantId);
+    if (!variant) return { ok: false as const, error: "Option not found." };
+    variant.active = true;
+    recalcBasePrice(db, variant.productId);
+    logAudit(db, {
+      actorId: actor.id,
+      actorName: actor.name,
+      action: "variant.restored",
+      entity: "variant",
+      entityId: variant.sku,
+      meta: {},
+    });
+    return { ok: true as const };
+  });
+}
+
+export async function removeProduct(productId: string, actor: Pick<User, "id" | "name">) {
+  return write((db) => {
+    const product = db.products.find((p) => p.id === productId);
+    if (!product) return { ok: false as const, error: "Product not found." };
+
+    const variantIds = db.variants.filter((v) => v.productId === productId).map((v) => v.id);
+    if (db.variants.some((v) => v.productId === productId && v.reserved > 0)) {
+      return { ok: false as const, error: "This product has stock held for open orders — clear those first." };
+    }
+
+    const sold = db.orderItems.some((i) => i.productId === productId);
+    if (sold) {
+      product.active = false;
+    } else {
+      db.products = db.products.filter((p) => p.id !== productId);
+      db.variants = db.variants.filter((v) => v.productId !== productId);
+      db.movements = db.movements.filter((m) => !variantIds.includes(m.variantId));
+    }
+
+    logAudit(db, {
+      actorId: actor.id,
+      actorName: actor.name,
+      action: sold ? "product.archived" : "product.deleted",
+      entity: "product",
+      entityId: product.slug,
+      meta: { hadSales: sold ? "yes" : "no" },
+    });
+    return { ok: true as const, retained: sold };
+  });
 }

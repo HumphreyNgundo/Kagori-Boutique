@@ -34,6 +34,7 @@ afterwards without phoning anyone.**
 | Storefront | Home, category pages, search, facets, product detail, variant picker | `src/app/(shop)` |
 | Cart & self-checkout | Cookie basket, coupons, delivery zones, M-Pesa / card / pay-on-delivery | `src/lib/cart.ts`, `src/lib/actions/checkout.ts` |
 | Orders & tracking | Lifecycle state machine, event timeline, public tracking page | `src/lib/repo/orders.ts` |
+| Catalogue management | Add products, add or retire sizes/colours, edit details and prices, delete or archive | `src/app/admin/products` |
 | Inventory | Reserve-on-order, commit-on-payment, release-on-cancel, append-only stock ledger | `src/lib/repo/admin.ts` |
 | Fulfilment | Packing queue, rider assignment, rider run sheet | `src/app/admin/orders`, `src/app/admin/deliveries` |
 | Media | Staff image upload to Vercel Blob, hero selection, generated fallback art | `src/lib/media.ts` |
@@ -72,6 +73,22 @@ basket and check out.
    assign a rider, mark it **Out for delivery**.
 4. Go back to `/order/<code>` as the customer: the timeline has moved.
 5. Sign in as `rider@kagorim.co.ke` — they see only that delivery, nothing else.
+
+### Running the shop day to day
+
+As owner or manager: **Products → Add a product** creates it with its first size and
+opening stock, then the product page is where you upload photos, add the remaining
+sizes or colours, reprice, receive stock (`+5`) or write off damage (`-2`).
+
+Removing is deliberately two-speed, because deleting a product that has been sold
+would corrupt past orders:
+
+| Situation | What happens |
+|---|---|
+| Option or product never ordered | Deleted outright |
+| Option or product with sales history | Retired/archived — hidden from the shop, kept in the console and in past orders |
+| Last remaining option of a product | Refused — hide the whole product instead |
+| Stock held for an unpaid order | Refused until that order is paid or cancelled |
 
 ## Documentation
 

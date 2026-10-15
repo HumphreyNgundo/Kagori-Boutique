@@ -1,9 +1,16 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { authorise } from "@/lib/auth/session";
 import {
+  addVariant,
   adjustStock,
+  createProduct,
+  removeProduct,
+  removeVariant,
+  restoreVariant,
+  updateProductDetails,
   attachProductImage,
   removeProductImage,
   saveSettings,
@@ -198,4 +205,131 @@ export async function resetDemoAction(_prev: ActionState): Promise<ActionState> 
   await resetStore();
   revalidatePath("/", "layout");
   return { error: null, ok: "Demo data restored." };
+}
+
+/* ------------------------------------------------- catalogue CRUD */
+
+/** Reads the dynamic Option-name/Option-value pairs posted by the editor forms. */
+function readOptions(formData: FormData): Record<string, string> {
+  const options: Record<string, string> = {};
+  for (let i = 0; i < 4; i++) {
+    const name = String(formData.get(`optionName${i}`) ?? "").trim();
+    const value = String(formData.get(`optionValue${i}`) ?? "").trim();
+    if (name && value) options[name] = value;
+  }
+  return options;
+}
+
+function readTags(formData: FormData): string[] {
+  return String(formData.get("tags") ?? "")
+    .split(",")
+    .map((t) => t.trim().toLowerCase())
+    .filter(Boolean)
+    .slice(0, 6);
+}
+
+export async function createProductAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  const auth = await authorise("product:edit");
+  if (!auth.ok) return { error: auth.error, ok: null };
+
+  const result = await createProduct(
+    {
+      name: String(formData.get("name") ?? ""),
+      categoryId: String(formData.get("categoryId") ?? ""),
+      summary: String(formData.get("summary") ?? ""),
+      description: String(formData.get("description") ?? ""),
+      tags: readTags(formData),
+      featured: formData.get("featured") === "on",
+      options: readOptions(formData),
+      // Prices are typed in shillings, stored in cents.
+      price: Math.round(Number(formData.get("price") ?? 0) * 100),
+      stock: Number(formData.get("stock") ?? 0),
+    },
+    auth.user,
+  );
+  if (!result.ok) return { error: result.error, ok: null };
+
+  revalidatePath("/admin", "layout");
+  revalidatePath("/", "layout");
+  redirect(`/admin/products/${result.productId}?created=1`);
+}
+
+export async function updateProductAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  const auth = await authorise("product:edit");
+  if (!auth.ok) return { error: auth.error, ok: null };
+
+  const result = await updateProductDetails(
+    String(formData.get("productId") ?? ""),
+    {
+      name: String(formData.get("name") ?? ""),
+      categoryId: String(formData.get("categoryId") ?? ""),
+      summary: String(formData.get("summary") ?? ""),
+      description: String(formData.get("description") ?? ""),
+      tags: readTags(formData),
+      featured: formData.get("featured") === "on",
+    },
+    auth.user,
+  );
+  if (!result.ok) return { error: result.error, ok: null };
+
+  revalidatePath("/admin", "layout");
+  revalidatePath("/", "layout");
+  return { error: null, ok: "Product details saved." };
+}
+
+export async function addVariantAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  const auth = await authorise("product:edit");
+  if (!auth.ok) return { error: auth.error, ok: null };
+
+  const result = await addVariant(
+    String(formData.get("productId") ?? ""),
+    {
+      options: readOptions(formData),
+      price: Math.round(Number(formData.get("price") ?? 0) * 100),
+      stock: Number(formData.get("stock") ?? 0),
+    },
+    auth.user,
+  );
+  if (!result.ok) return { error: result.error, ok: null };
+
+  revalidatePath("/admin", "layout");
+  revalidatePath("/", "layout");
+  return { error: null, ok: "Option added and stock recorded." };
+}
+
+export async function removeVariantAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  const auth = await authorise("product:edit");
+  if (!auth.ok) return { error: auth.error, ok: null };
+
+  const result = await removeVariant(String(formData.get("variantId") ?? ""), auth.user);
+  if (!result.ok) return { error: result.error, ok: null };
+
+  revalidatePath("/admin", "layout");
+  revalidatePath("/", "layout");
+  return {
+    error: null,
+    ok: result.retained
+      ? "Option retired — past orders keep their history."
+      : "Option deleted.",
+  };
+}
+
+export async function restoreVariantAction(formData: FormData) {
+  const auth = await authorise("product:edit");
+  if (!auth.ok) return;
+  await restoreVariant(String(formData.get("variantId") ?? ""), auth.user);
+  revalidatePath("/admin", "layout");
+  revalidatePath("/", "layout");
+}
+
+export async function removeProductAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  const auth = await authorise("product:edit");
+  if (!auth.ok) return { error: auth.error, ok: null };
+
+  const result = await removeProduct(String(formData.get("productId") ?? ""), auth.user);
+  if (!result.ok) return { error: result.error, ok: null };
+
+  revalidatePath("/admin", "layout");
+  revalidatePath("/", "layout");
+  redirect(result.retained ? "/admin/products?archived=1" : "/admin/products?deleted=1");
 }

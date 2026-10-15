@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Eye, EyeOff, ImageOff, Images } from "lucide-react";
+import { Check, Eye, EyeOff, ImageOff, Images, Plus } from "lucide-react";
 import { PageHeader, TableWrap, Td, Th } from "@/components/admin/ui";
 import { requirePermission } from "@/lib/auth/session";
 import { can } from "@/lib/auth/rbac";
@@ -10,8 +10,13 @@ import { ksh } from "@/lib/money";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Products" };
 
-export default async function AdminProductsPage() {
+export default async function AdminProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ archived?: string; deleted?: string }>;
+}) {
   const user = await requirePermission("product:view");
+  const { archived, deleted } = await searchParams;
   const rows = await listProductsForAdmin();
   const mayEdit = can(user.role, "product:edit");
   const withoutPhotos = rows.filter((r) => r.imageCount === 0).length;
@@ -21,7 +26,23 @@ export default async function AdminProductsPage() {
       <PageHeader
         title="Products"
         subtitle={`${rows.length} products · ${withoutPhotos} still using placeholder artwork`}
+        action={
+          mayEdit ? (
+            <Link href="/admin/products/new" className="btn btn-primary btn-sm">
+              <Plus size={14} /> Add a product
+            </Link>
+          ) : undefined
+        }
       />
+
+      {(archived || deleted) && (
+        <p className="mb-4 flex items-center gap-2 rounded-xl bg-[var(--positive-soft)] p-3 text-sm font-medium text-[var(--positive)]">
+          <Check size={15} />
+          {deleted
+            ? "Product deleted."
+            : "Product hidden from the shop — it had sales history, so past orders keep their records."}
+        </p>
+      )}
 
       {withoutPhotos > 0 && mayEdit && (
         <p className="mb-4 flex items-center gap-2 rounded-xl bg-[var(--brand-soft)] p-3 text-xs text-brand">
