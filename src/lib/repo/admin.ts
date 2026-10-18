@@ -2,6 +2,7 @@ import "server-only";
 import { read, write } from "@/lib/db";
 import { randomId } from "@/lib/ids";
 import { availableOf } from "@/lib/repo/catalog";
+import { imagesOf } from "@/lib/product-images";
 import { OPEN_STATUSES } from "@/lib/order-status";
 import type { AuditLog, Database, ProductFamily, StoreSettings, User } from "@/lib/types";
 
@@ -375,7 +376,7 @@ export async function listProductsForAdmin() {
         categoryName: categories.get(p.categoryId)?.name ?? "—",
         variantCount: variants.length,
         stock: variants.reduce((sum, v) => sum + Math.max(0, v.stock - v.reserved), 0),
-        imageCount: p.images.length,
+        imageCount: imagesOf(p).length,
       };
     })
     .sort((a, b) => a.categoryName.localeCompare(b.categoryName) || a.product.name.localeCompare(b.product.name));
