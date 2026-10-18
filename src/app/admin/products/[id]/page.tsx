@@ -18,7 +18,6 @@ import { can } from "@/lib/auth/rbac";
 import { getProductForAdmin } from "@/lib/repo/admin";
 import { listCategories } from "@/lib/repo/catalog";
 import { mediaConfigured } from "@/lib/media";
-import { usingDefaultImages } from "@/lib/product-images";
 import { ksh } from "@/lib/money";
 
 export const dynamic = "force-dynamic";
@@ -76,12 +75,6 @@ export default async function AdminProductPage({
       <div className="grid gap-4 xl:grid-cols-[1fr_1.2fr] xl:items-start">
         <div className="space-y-4">
           <Panel title="Photos">
-            {usingDefaultImages(product) && (
-              <p className="mb-3 rounded-xl bg-[var(--accent-soft)] p-3 text-xs leading-relaxed text-[var(--accent)]">
-                Showing a stock photo that ships with the demo. Upload your own and it replaces the stock one
-                everywhere on the shop.
-              </p>
-            )}
             {mayEdit ? (
               <MediaManager
                 productId={product.id}

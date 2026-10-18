@@ -2,7 +2,6 @@ import "server-only";
 import { cookies } from "next/headers";
 import { read } from "@/lib/db";
 import { availableOf } from "@/lib/repo/catalog";
-import { imagesOf } from "@/lib/product-images";
 import type { Cart, Coupon, HydratedLine } from "@/lib/types";
 
 export const CART_COOKIE = "kagorim_cart";
@@ -101,7 +100,7 @@ export async function summarise(cart: Cart): Promise<CartSummary> {
     lines.push({
       variantId: variant.id,
       quantity: line.quantity,
-      product: { ...product, images: imagesOf(product) },
+      product,
       variant,
       category,
       optionsLabel: Object.values(variant.options).join(" · "),

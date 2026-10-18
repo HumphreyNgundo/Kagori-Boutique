@@ -17,6 +17,11 @@ export async function GET() {
       durable: driver.durable,
       seedVersion: db.version,
       savedAt: db.savedAt ?? null,
+      migrations: db.migrations ?? [],
+      photos: {
+        withImages: db.products.filter((p) => p.images.length > 0).length,
+        total: db.products.length,
+      },
       counts: {
         products: db.products.length,
         variants: db.variants.length,

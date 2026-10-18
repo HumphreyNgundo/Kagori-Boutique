@@ -1,6 +1,5 @@
 import "server-only";
 import { read } from "@/lib/db";
-import { imagesOf } from "@/lib/product-images";
 import type { Category, Product, Variant } from "@/lib/types";
 
 export interface ProductCard {
@@ -18,7 +17,6 @@ export function availableOf(v: Variant): number {
 
 function toCard(product: Product, category: Category, variants: Variant[]): ProductCard {
   const live = variants.filter((v) => v.active);
-  const withPhotos = { ...product, images: imagesOf(product) };
   const axes: Record<string, string[]> = {};
   for (const v of live) {
     for (const [key, value] of Object.entries(v.options)) {
@@ -27,10 +25,10 @@ function toCard(product: Product, category: Category, variants: Variant[]): Prod
     }
   }
   return {
-    product: withPhotos,
+    product,
     category,
     variants: live,
-    fromPrice: live.length ? Math.min(...live.map((v) => v.price)) : withPhotos.basePrice,
+    fromPrice: live.length ? Math.min(...live.map((v) => v.price)) : product.basePrice,
     available: live.reduce((sum, v) => sum + availableOf(v), 0),
     optionAxes: axes,
   };

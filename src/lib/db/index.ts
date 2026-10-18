@@ -1,6 +1,7 @@
 import "server-only";
 import type { Database } from "@/lib/types";
 import { buildDatabase, SEED_VERSION } from "@/lib/seed";
+import { photosFor } from "@/lib/seed/photos";
 import { selectDriver, type PersistenceDriver } from "@/lib/db/driver";
 
 /**
@@ -27,20 +28,58 @@ const cache: Cache = (g.__kagorim ??= { db: null, at: 0, inflight: null });
 export const driver: PersistenceDriver = selectDriver();
 
 /**
+ * One-time fixes applied to a snapshot written by an older build. Each runs
+ * once and records itself, so a store that predates a change catches up
+ * without re-seeding — which would throw away real orders.
+ */
+const MIGRATIONS: { id: string; apply: (db: Database) => boolean }[] = [
+  {
+    // Photos moved from files shipped in the repo to URLs on the product record.
+    id: "product-photos-v1",
+    apply(db) {
+      let changed = false;
+      for (const product of db.products) {
+        if (product.images.length) continue;
+        const photos = photosFor(product.slug);
+        if (!photos.length) continue;
+        product.images = [...photos];
+        changed = true;
+      }
+      return changed;
+    },
+  },
+];
+
+async function migrate(db: Database): Promise<Database> {
+  const applied = new Set(db.migrations ?? []);
+  let dirty = false;
+
+  for (const migration of MIGRATIONS) {
+    if (applied.has(migration.id)) continue;
+    migration.apply(db);
+    applied.add(migration.id);
+    dirty = true;
+  }
+
+  if (dirty) {
+    db.migrations = [...applied];
+    db.savedAt = new Date().toISOString();
+    await driver.save(db);
+  }
+  return db;
+}
+
+/**
  * Turns "what the driver returned" into "the database to use", and is the only
  * place allowed to seed. Seeding over live data loses real orders, so it happens
  * only when the store is genuinely empty or the seed version moved on.
  */
 async function resolve(loaded: Database | null): Promise<Database> {
-  if (loaded && loaded.version === SEED_VERSION) return loaded;
+  if (loaded && loaded.version === SEED_VERSION) return migrate(loaded);
 
   // Stale snapshots from an older seed are discarded rather than merged —
   // partial shapes would surface as missing fields all over the UI.
-  if (loaded) {
-    const seeded = buildDatabase();
-    await driver.save(seeded);
-    return seeded;
-  }
+  if (loaded) return freshSeed();
 
   // Empty store, but this instance has already served data from it: that is a
   // lost read, not a fresh install. Re-publish what we hold instead of wiping.
@@ -49,7 +88,13 @@ async function resolve(loaded: Database | null): Promise<Database> {
     return cache.db;
   }
 
+  return freshSeed();
+}
+
+/** A new store starts already carrying every migration. */
+async function freshSeed(): Promise<Database> {
   const seeded = buildDatabase();
+  seeded.migrations = MIGRATIONS.map((m) => m.id);
   await driver.save(seeded);
   return seeded;
 }

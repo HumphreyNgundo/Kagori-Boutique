@@ -2,7 +2,7 @@ import "server-only";
 import { read, write } from "@/lib/db";
 import { randomId } from "@/lib/ids";
 import { availableOf } from "@/lib/repo/catalog";
-import { imagesOf } from "@/lib/product-images";
+import { photosFor } from "@/lib/seed/photos";
 import { OPEN_STATUSES } from "@/lib/order-status";
 import type { AuditLog, Database, ProductFamily, StoreSettings, User } from "@/lib/types";
 
@@ -376,7 +376,7 @@ export async function listProductsForAdmin() {
         categoryName: categories.get(p.categoryId)?.name ?? "—",
         variantCount: variants.length,
         stock: variants.reduce((sum, v) => sum + Math.max(0, v.stock - v.reserved), 0),
-        imageCount: imagesOf(p).length,
+        imageCount: p.images.length,
       };
     })
     .sort((a, b) => a.categoryName.localeCompare(b.categoryName) || a.product.name.localeCompare(b.product.name));
@@ -711,4 +711,46 @@ export async function removeProduct(productId: string, actor: Pick<User, "id" | 
     });
     return { ok: true as const, retained: sold };
   });
+}
+
+/**
+ * Writes the demo photo URLs into product records that have none. Needed
+ * because the store persists across deployments: a store seeded before the
+ * photos existed keeps its empty image arrays, and re-seeding to fix that
+ * would throw away real orders. Idempotent, and never touches a product whose
+ * photos staff have already set.
+ */
+export async function backfillProductPhotos(actor: Pick<User, "id" | "name">) {
+  return write((db) => {
+    let updated = 0;
+    for (const product of db.products) {
+      if (product.images.length) continue;
+      const photos = photosFor(product.slug);
+      if (!photos.length) continue;
+      product.images = [...photos];
+      updated++;
+    }
+
+    if (updated) {
+      logAudit(db, {
+        actorId: actor.id,
+        actorName: actor.name,
+        action: "catalogue.photos_backfilled",
+        entity: "store",
+        entityId: "catalogue",
+        meta: { products: updated },
+      });
+    }
+
+    const remaining = db.products.filter((p) => !p.images.length).length;
+    return { ok: true as const, updated, remaining };
+  });
+}
+
+/** How many products are still waiting on a photo. */
+export async function photoCoverage() {
+  const db = await read();
+  const withPhotos = db.products.filter((p) => p.images.length).length;
+  const importable = db.products.filter((p) => !p.images.length && photosFor(p.slug).length).length;
+  return { total: db.products.length, withPhotos, importable };
 }

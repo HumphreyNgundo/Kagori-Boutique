@@ -37,7 +37,7 @@ afterwards without phoning anyone.**
 | Catalogue management | Add products, add or retire sizes/colours, edit details and prices, delete or archive | `src/app/admin/products` |
 | Inventory | Reserve-on-order, commit-on-payment, release-on-cancel, append-only stock ledger | `src/lib/repo/admin.ts` |
 | Fulfilment | Packing queue, rider assignment, rider run sheet | `src/app/admin/orders`, `src/app/admin/deliveries` |
-| Media | Staff image upload to Vercel Blob, hero selection, generated fallback art | `src/lib/media.ts` |
+| Media | Photo URLs on the product record, staff upload to Vercel Blob, hero selection, generated fallback art | `src/lib/media.ts` |
 | Identity & RBAC | 6 roles, 18 permissions, signed session cookie, server-side guards | `src/lib/auth` |
 | Analytics | 30-day revenue, AOV, top sellers, low stock, pipeline counts | `src/lib/repo/admin.ts` |
 | Audit | Append-only log of every state change, with actor | `src/app/admin/audit` |
@@ -98,6 +98,7 @@ would corrupt past orders:
 | [`docs/DATA-MODEL.md`](docs/DATA-MODEL.md) | Entity relationships, invariants, stock semantics |
 | [`docs/RBAC.md`](docs/RBAC.md) | Roles, the permission matrix, how guards are enforced |
 | [`db/schema.sql`](db/schema.sql) | Production PostgreSQL DDL — the target for the data-layer swap |
+| [`docs/PHOTO-CREDITS.md`](docs/PHOTO-CREDITS.md) | Where the demo photography comes from and how photos reach a product |
 
 ## Environment
 

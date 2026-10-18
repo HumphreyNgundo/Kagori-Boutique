@@ -1,8 +1,9 @@
 import { Database, HardDrive, Image as ImageIcon } from "lucide-react";
-import { ResetDemo, SettingsForm } from "@/components/admin/SettingsForm";
+import { BackfillPhotos, ResetDemo, SettingsForm } from "@/components/admin/SettingsForm";
 import { PageHeader, Panel } from "@/components/admin/ui";
 import { requirePermission } from "@/lib/auth/session";
 import { getSettings } from "@/lib/repo/catalog";
+import { photoCoverage } from "@/lib/repo/admin";
 import { mediaConfigured } from "@/lib/media";
 import { driver } from "@/lib/db";
 
@@ -11,7 +12,7 @@ export const metadata = { title: "Settings" };
 
 export default async function SettingsPage() {
   await requirePermission("settings:manage");
-  const settings = await getSettings();
+  const [settings, coverage] = await Promise.all([getSettings(), photoCoverage()]);
   const mediaReady = mediaConfigured();
 
   return (
@@ -60,6 +61,16 @@ export default async function SettingsPage() {
                 </div>
               </li>
             </ul>
+          </Panel>
+
+          <Panel title="Product photos">
+            <p className="mb-3 text-xs leading-relaxed text-muted">
+              {coverage.withPhotos} of {coverage.total} products have a photo.
+              {coverage.importable > 0
+                ? " Demo photography is available for some of the rest — adding it writes the image onto each product record, leaving orders and stock untouched."
+                : " Upload your own from any product page to replace the demo photography."}
+            </p>
+            <BackfillPhotos importable={coverage.importable} />
           </Panel>
 
           <Panel title="Demo data">

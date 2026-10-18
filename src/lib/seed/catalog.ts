@@ -1,5 +1,5 @@
 import type { Category, Product, Variant } from "@/lib/types";
-import { MEDIA_MANIFEST } from "@/lib/media-manifest";
+import { photosFor } from "@/lib/seed/photos";
 
 /* Prices are minor units: KES 6,500 -> 650000 */
 const K = (shillings: number) => shillings * 100;
@@ -372,11 +372,6 @@ const SPECS: Spec[] = [
   },
 ];
 
-/** Photos dropped into public/products/<slug>/ are picked up automatically. */
-function imagesForSlug(slug: string): string[] {
-  return MEDIA_MANIFEST[slug] ?? [];
-}
-
 function skuFor(slug: string, options: Record<string, string>, index: number): string {
   const base = slug.split("-").map((p) => p.slice(0, 3).toUpperCase()).join("").slice(0, 9);
   const tail = Object.values(options).join("-").replace(/[^a-zA-Z0-9]/g, "").toUpperCase().slice(0, 8);
@@ -400,7 +395,7 @@ export function buildCatalog(): { products: Product[]; variants: Variant[] } {
       basePrice: Math.min(...prices),
       compareAtPrice: spec.compareAt ?? null,
       tags: spec.tags,
-      images: imagesForSlug(spec.slug),
+      images: photosFor(spec.slug),
       featured: spec.featured ?? false,
       active: true,
       createdAt: new Date(createdBase + pi * 36e5).toISOString(),

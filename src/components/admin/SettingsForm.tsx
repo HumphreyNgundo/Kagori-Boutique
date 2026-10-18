@@ -2,11 +2,12 @@
 
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { AlertCircle, Check, Loader2, RotateCcw } from "lucide-react";
+import { AlertCircle, Check, ImagePlus, Loader2, RotateCcw } from "lucide-react";
 import {
   resetDemoAction,
   saveSettingsAction,
 } from "@/lib/actions/admin";
+import { backfillPhotosAction } from "@/lib/actions/admin";
 import { IDLE, type ActionState } from "@/lib/actions/state";
 import type { StoreSettings } from "@/lib/types";
 
@@ -111,6 +112,22 @@ export function ResetDemo() {
     <form action={action} className="space-y-3">
       <Feedback state={state} />
       <Reset />
+    </form>
+  );
+}
+
+export function BackfillPhotos({ importable }: { importable: number }) {
+  const [state, action] = useActionState<ActionState, FormData>(
+    async (prev: ActionState) => backfillPhotosAction(prev),
+    IDLE,
+  );
+  return (
+    <form action={action} className="space-y-3">
+      <Feedback state={state} />
+      <button type="submit" className="btn btn-primary btn-sm">
+        <ImagePlus size={14} />
+        {importable ? `Add photos to ${importable} products` : "Re-check product photos"}
+      </button>
     </form>
   );
 }

@@ -9,6 +9,7 @@ import {
   createProduct,
   removeProduct,
   removeVariant,
+  backfillProductPhotos,
   restoreVariant,
   updateProductDetails,
   attachProductImage,
@@ -311,6 +312,21 @@ export async function removeVariantAction(_prev: ActionState, formData: FormData
     ok: result.retained
       ? "Option retired — past orders keep their history."
       : "Option deleted.",
+  };
+}
+
+export async function backfillPhotosAction(_prev: ActionState): Promise<ActionState> {
+  const auth = await authorise("product:edit");
+  if (!auth.ok) return { error: auth.error, ok: null };
+
+  const result = await backfillProductPhotos(auth.user);
+  revalidatePath("/admin", "layout");
+  revalidatePath("/", "layout");
+  return {
+    error: null,
+    ok: result.updated
+      ? `${result.updated} product${result.updated === 1 ? "" : "s"} now have photos. ${result.remaining} still need their own.`
+      : "Every product that has a demo photo already has it.",
   };
 }
 

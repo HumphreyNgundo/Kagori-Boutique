@@ -234,6 +234,8 @@ export interface Database {
   version: number;
   /** Set on every persisted write — lets /api/health reveal a lost snapshot. */
   savedAt?: string;
+  /** One-time data migrations already applied to this snapshot. */
+  migrations?: string[];
   users: User[];
   categories: Category[];
   products: Product[];
