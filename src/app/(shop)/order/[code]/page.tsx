@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { Copy, MapPin, MessageCircle, Package, Phone, Smartphone } from "lucide-react";
+import { Copy, MapPin, MessageCircle, Package, PackageSearch, Phone, Smartphone } from "lucide-react";
 import { EventLog, StatusBadge, TrackingRail } from "@/components/OrderStatus";
 import { getOrderByCode } from "@/lib/repo/orders";
 import { getSettings } from "@/lib/repo/catalog";
@@ -16,10 +15,36 @@ export async function generateMetadata({ params }: { params: Promise<{ code: str
 export default async function OrderPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
   const detail = await getOrderByCode(code);
-  if (!detail) notFound();
+  const settings = await getSettings();
+
+  // A bare 404 leaves a customer holding a code and nowhere to go.
+  if (!detail) {
+    return (
+      <div className="mx-auto grid max-w-md place-items-center gap-4 px-4 py-24 text-center">
+        <span className="grid h-16 w-16 place-items-center rounded-full bg-[var(--warning-soft)] text-[var(--warning)]">
+          <PackageSearch size={26} />
+        </span>
+        <h1 className="text-2xl font-bold tracking-tight">We can&apos;t find order {code}</h1>
+        <p className="text-sm leading-relaxed text-muted">
+          Check the code against your confirmation — letters only, no spaces. If it still doesn&apos;t come up,
+          message us with the code and we&apos;ll look it up by hand.
+        </p>
+        <div className="flex flex-wrap justify-center gap-2">
+          <Link href="/track" className="btn btn-primary btn-sm">Try another code</Link>
+          <a
+            href={`https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(`Hi Kagorim, I can't find my order ${code}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-outline btn-sm"
+          >
+            <MessageCircle size={14} /> Ask us on WhatsApp
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   const { order, items, events, customer, zoneName, riderName } = detail;
-  const settings = await getSettings();
   const awaitingPayment = order.paymentStatus === "PENDING" && order.paymentMethod !== "ON_DELIVERY";
 
   return (

@@ -232,6 +232,8 @@ export interface HydratedLine {
 export interface Database {
   /** Bumped when the seed itself changes; a mismatch re-seeds the store. */
   version: number;
+  /** Set on every persisted write — lets /api/health reveal a lost snapshot. */
+  savedAt?: string;
   users: User[];
   categories: Category[];
   products: Product[];
