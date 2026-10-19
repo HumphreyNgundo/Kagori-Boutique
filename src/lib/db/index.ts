@@ -55,6 +55,21 @@ const MIGRATIONS: { id: string; apply: (db: Database) => boolean }[] = [
     id: "product-photos-v2",
     apply: applyPhotos,
   },
+  {
+    // A wig on a mannequin head replaced modelled hair on the bob. This one
+    // overwrites rather than fills, so it only touches that product and only
+    // where the record still holds the photo it is replacing.
+    id: "wig-mannequin-v1",
+    apply(db) {
+      const product = db.products.find((p) => p.slug === "nia-blunt-cut-bob");
+      const replacement = photosFor("nia-blunt-cut-bob");
+      if (!product || !replacement.length) return false;
+      const isStock = product.images.every((url) => url.includes("images.unsplash.com"));
+      if (!product.images.length || !isStock) return false;
+      product.images = [...replacement];
+      return true;
+    },
+  },
 ];
 
 
