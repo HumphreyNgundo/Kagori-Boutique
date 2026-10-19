@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, PackageCheck, ShieldCheck, Smartphone, Truck } from "lucide-react";
-import { ProductArt } from "@/components/ProductArt";
+import { CategoryTile } from "@/components/shop/CategoryTile";
+import { HERO_PHOTO } from "@/lib/seed/photos";
 import { ProductGrid } from "@/components/shop/ProductCard";
 import { listCategories, listProducts } from "@/lib/repo/catalog";
 
@@ -62,25 +63,23 @@ export default async function HomePage() {
             </dl>
           </div>
 
-          {/* Collage of category art — doubles as navigation. */}
-          <div className="relative grid grid-cols-2 gap-3 sm:gap-4">
-            {categories.slice(0, 4).map((c, i) => (
-              <Link
-                key={c.id}
-                href={`/c/${c.slug}`}
-                className={`card group overflow-hidden ${i % 2 === 1 ? "mt-5" : ""}`}
-              >
-                <ProductArt
-                  seed={c.slug}
-                  family={c.family}
-                  className="aspect-square w-full transition duration-500 group-hover:scale-105"
-                />
-                <div className="p-3">
-                  <p className="text-sm font-semibold group-hover:text-brand">{c.name}</p>
-                  <p className="line-clamp-1 text-xs text-subtle">{c.tagline}</p>
-                </div>
-              </Link>
-            ))}
+          {/* Lead photograph, with two shelves tucked beneath it. */}
+          <div className="relative">
+            <div className="card overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={HERO_PHOTO}
+                alt="Kagorim Boutique"
+                fetchPriority="high"
+                decoding="async"
+                className="aspect-[7/5] w-full object-cover"
+              />
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:gap-4">
+              {categories.slice(0, 2).map((c) => (
+                <CategoryTile key={c.id} category={c} priority />
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -99,12 +98,7 @@ export default async function HomePage() {
 
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {categories.map((c) => (
-            <Link key={c.id} href={`/c/${c.slug}`} className="card group overflow-hidden text-center">
-              <ProductArt seed={`${c.slug}-tile`} family={c.family} className="aspect-square w-full transition duration-500 group-hover:scale-105" />
-              <div className="p-3">
-                <p className="text-sm font-semibold group-hover:text-brand">{c.name}</p>
-              </div>
-            </Link>
+            <CategoryTile key={c.id} category={c} />
           ))}
         </div>
       </section>

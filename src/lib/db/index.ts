@@ -32,23 +32,31 @@ export const driver: PersistenceDriver = selectDriver();
  * once and records itself, so a store that predates a change catches up
  * without re-seeding — which would throw away real orders.
  */
+function applyPhotos(db: Database): boolean {
+  let changed = false;
+  for (const product of db.products) {
+    if (product.images.length) continue;
+    const photos = photosFor(product.slug);
+    if (!photos.length) continue;
+    product.images = [...photos];
+    changed = true;
+  }
+  return changed;
+}
+
 const MIGRATIONS: { id: string; apply: (db: Database) => boolean }[] = [
   {
     // Photos moved from files shipped in the repo to URLs on the product record.
     id: "product-photos-v1",
-    apply(db) {
-      let changed = false;
-      for (const product of db.products) {
-        if (product.images.length) continue;
-        const photos = photosFor(product.slug);
-        if (!photos.length) continue;
-        product.images = [...photos];
-        changed = true;
-      }
-      return changed;
-    },
+    apply: applyPhotos,
+  },
+  {
+    // The remaining catalogue got photography too.
+    id: "product-photos-v2",
+    apply: applyPhotos,
   },
 ];
+
 
 async function migrate(db: Database): Promise<Database> {
   const applied = new Set(db.migrations ?? []);

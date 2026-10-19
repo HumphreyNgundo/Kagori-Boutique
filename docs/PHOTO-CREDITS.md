@@ -11,28 +11,22 @@ The demo URLs point at [Unsplash](https://unsplash.com), used under the
 without attribution. The crop (square, WebP, 1100px) is applied by Unsplash's
 own image pipeline, so there is nothing to process at build time.
 
-| Product | Unsplash photo id |
-|---|---|
-| Aria Body Wave HD Lace Wig | photo-1522337360788-8b13dee7a37e |
-| Amani Block Heel Sandal | photo-1535043934128-cf0b28d52f95, photo-1543163521-1bf539c55dd2 |
-| Nova Pointed Stiletto | photo-1596703263926-eb0762ee17e4, photo-1573100925118-870b8efc799d |
-| Mara Kitten Heel Mule | photo-1518049362265-d5b2a6467637, photo-1515347619252-60a4bf4fff4f |
-| Sauti Structured Tote | photo-1584917865442-de89df76afd3 |
-| Dala Shoulder Bag | photo-1590874103328-eac38a683ce7 |
-| Noir Evening Clutch | photo-1566150905458-1bf1fc113f0d |
-| Safari Mini Crossbody | photo-1594223274512-ad4803739b7c |
-| Kasi Mesh Runner | photo-1560769629-975ec94e6a86 |
-| Imani Leather Loafer | photo-1533867617858-e7b97e060509 |
+Every one of the 28 products carries a photograph, as do the nine category
+shelves and the landing page. The full mapping lives in
+`src/lib/seed/photos.ts` — each entry is an Unsplash photo id, so the file is
+the credit list.
 
-Every photo was downloaded and inspected before being listed here. Candidates
-showing another brand's logo were rejected, as were several that turned out not
-to be the product at all.
+Every photo was downloaded and inspected before being listed. Several
+candidates that looked right as thumbnails turned out to be a different product
+entirely and were dropped. Brand logos are visible on some of the footwear and
+cosmetics, which is fine for a demo but would need replacing before selling.
 
-**These are stock photographs of similar items, not Kagorim's own stock.** The
-remaining products — lashes, lash accessories, wig accessories, doll shoes and
-three of the four wigs — keep generated artwork, because nothing licence-clean
-and on-subject was found for them. Replace all of it with real product
-photography before selling.
+**These are stock photographs of similar items, not Kagorim's own stock**, so
+some are approximations: the wigs are modelled hair rather than units on a
+mannequin head, and a few shoes match the category better than the exact
+silhouette. Replace them with real product photography from the console before
+selling — generated artwork still covers anything without a photo, so a new
+product never renders as a hole.
 
 ## How a photo reaches a product
 
