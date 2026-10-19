@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { Copy, MapPin, MessageCircle, Package, PackageSearch, Phone, Smartphone } from "lucide-react";
+import { AlertCircle, Copy, MapPin, MessageCircle, Package, PackageSearch, Phone, Smartphone } from "lucide-react";
 import { EventLog, StatusBadge, TrackingRail } from "@/components/OrderStatus";
 import { getOrderByCode } from "@/lib/repo/orders";
 import { getSettings } from "@/lib/repo/catalog";
-import { simulatePayment } from "@/lib/actions/checkout";
 import { ksh } from "@/lib/money";
 
 export const dynamic = "force-dynamic";
@@ -12,8 +11,14 @@ export async function generateMetadata({ params }: { params: Promise<{ code: str
   return { title: `Order ${(await params).code}` };
 }
 
-export default async function OrderPage({ params }: { params: Promise<{ code: string }> }) {
-  const { code } = await params;
+export default async function OrderPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ code: string }>;
+  searchParams: Promise<{ payment?: string }>;
+}) {
+  const [{ code }, { payment }] = await Promise.all([params, searchParams]);
   const detail = await getOrderByCode(code);
   const settings = await getSettings();
 
@@ -66,6 +71,12 @@ export default async function OrderPage({ params }: { params: Promise<{ code: st
         </div>
       </div>
 
+      {payment === "failed" && (
+        <p className="card mt-5 flex items-center gap-2 p-4 text-sm font-medium" style={{ color: "var(--danger)" }}>
+          <AlertCircle size={16} /> We couldn&apos;t confirm that payment. Try again, or message us on WhatsApp.
+        </p>
+      )}
+
       {awaitingPayment && (
         <div className="card mt-5 flex flex-col gap-4 border-2 p-6 sm:flex-row sm:items-center sm:justify-between" style={{ borderColor: "var(--warning)" }}>
           <div className="flex items-start gap-3">
@@ -79,8 +90,10 @@ export default async function OrderPage({ params }: { params: Promise<{ code: st
               </p>
             </div>
           </div>
-          {/* Demo shortcut standing in for the Daraja callback. */}
-          <form action={simulatePayment}>
+          {/* Demo shortcut standing in for the Daraja callback. Posts to a
+              route handler, not a server action: action ids are rebuilt on
+              every deployment, so a page left open across a deploy would 404. */}
+          <form method="post" action="/api/payments/mpesa/confirm">
             <input type="hidden" name="code" value={order.code} />
             <button type="submit" className="btn btn-primary btn-sm whitespace-nowrap">
               Simulate payment
