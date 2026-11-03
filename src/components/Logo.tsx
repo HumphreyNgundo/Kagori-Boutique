@@ -43,9 +43,9 @@ export function Wordmark({ compact = false }: { compact?: boolean }) {
         </span>
         <span
           className="text-subtle font-semibold"
-          style={{ fontSize: compact ? "0.5rem" : "0.5625rem", letterSpacing: "0.34em" }}
+          style={{ fontSize: compact ? "0.45rem" : "0.5rem", letterSpacing: "0.3em" }}
         >
-          BOUTIQUE
+          ENTERPRISE
         </span>
       </span>
     </span>

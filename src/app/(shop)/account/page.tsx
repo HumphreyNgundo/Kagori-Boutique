@@ -15,8 +15,8 @@ export default async function AccountPage() {
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-extrabold tracking-tight">My orders</h1>
       <p className="mt-2 max-w-lg text-sm text-muted">
-        Everything you&apos;ve ordered from this device. No account needed — we remember your
-        tracking codes locally, and you can always look an order up with its code.
+        Everything you&apos;ve ordered from this device. We remember your tracking codes here, and
+        you can always look an order up with its code.
       </p>
 
       {orders.length === 0 ? (

@@ -53,7 +53,7 @@ export function Listing({
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="eyebrow">Kagorim Boutique</p>
+          <p className="eyebrow">Kagorim Enterprise</p>
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">{title}</h1>
           {subtitle && <p className="mt-2 max-w-xl text-sm text-muted">{subtitle}</p>}
         </div>
@@ -105,13 +105,6 @@ export function Listing({
             );
           }),
         )}
-        <Link
-          href={href(base, params, { stock: params.stock ? undefined : "in" })}
-          className="chip shrink-0"
-          data-active={Boolean(params.stock)}
-        >
-          In stock only
-        </Link>
         {hasFilters && (
           <Link href={base} className="chip shrink-0 border-dashed">
             Clear

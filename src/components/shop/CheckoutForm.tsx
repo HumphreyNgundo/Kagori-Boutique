@@ -80,10 +80,16 @@ export function CheckoutForm({
               />
             </div>
             <div className="sm:col-span-2">
-              <label className="label" htmlFor="email">
-                Email <span className="font-normal text-subtle">— optional, for the receipt</span>
-              </label>
-              <input id="email" name="email" type="email" autoComplete="email" placeholder="you@example.com" className="input" />
+              <label className="label" htmlFor="email">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                autoComplete="email"
+                placeholder="you@example.com"
+                className="input"
+              />
             </div>
           </div>
         </section>
@@ -227,7 +233,7 @@ export function CheckoutForm({
 
         <p className="flex items-start gap-1.5 text-xs leading-relaxed text-subtle">
           <Lock size={12} className="mt-0.5 shrink-0" />
-          No account needed. Your tracking code appears the moment you place the order.
+          Your tracking code appears the moment you place the order, and we email you a receipt.
         </p>
       </aside>
     </form>

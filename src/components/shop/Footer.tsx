@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MessageCircle, Phone } from "lucide-react";
 import { Wordmark } from "@/components/Logo";
+import { Newsletter } from "@/components/shop/Newsletter";
 import { listCategories, getSettings } from "@/lib/repo/catalog";
 
 export async function Footer() {
@@ -11,10 +12,7 @@ export async function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <Wordmark />
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
-            Wigs, lashes, shoes and bags — picked for Nairobi, delivered countrywide.
-            Order in under two minutes, no account needed.
-          </p>
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">{settings.tagline}</p>
           <div className="mt-5 flex flex-wrap gap-2">
             <a
               href={`https://wa.me/${settings.whatsapp}`}
@@ -52,12 +50,11 @@ export async function Footer() {
         </div>
 
         <div>
-          <p className="eyebrow mb-4">Boutique</p>
-          <ul className="space-y-2.5 text-sm text-muted">
+          <Newsletter />
+          <ul className="mt-6 space-y-2.5 text-sm text-muted">
             <li><Link href="/help" className="transition hover:text-brand">How it works</Link></li>
-            <li><Link href="/login" className="transition hover:text-brand">Staff sign in</Link></li>
           </ul>
-          <p className="mt-6 text-xs leading-relaxed text-subtle">
+          <p className="mt-4 text-xs leading-relaxed text-subtle">
             Pay with M-Pesa, card or on delivery.
           </p>
         </div>
@@ -65,7 +62,7 @@ export async function Footer() {
 
       <div className="border-t border-line">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-5 text-xs text-subtle sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p>© {new Date().getFullYear()} {settings.storeName} — Kagorim Enterprise. Demo store.</p>
+          <p>© {new Date().getFullYear()} {settings.storeName}. All rights reserved.</p>
           <p>Nairobi, Kenya · Prices in {settings.currency}</p>
         </div>
       </div>

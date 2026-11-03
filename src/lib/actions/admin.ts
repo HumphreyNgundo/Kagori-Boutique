@@ -184,7 +184,10 @@ export async function saveSettingsAction(_prev: ActionState, formData: FormData)
   const freeOver = Number(formData.get("freeDeliveryOver") ?? 0);
   await saveSettings(
     {
-      storeName: String(formData.get("storeName") ?? "").trim() || "Kagorim Boutique",
+      storeName: String(formData.get("storeName") ?? "").trim() || "Kagorim Enterprise",
+      tagline: String(formData.get("tagline") ?? "").trim(),
+      address: String(formData.get("address") ?? "").trim(),
+      hours: String(formData.get("hours") ?? "").trim(),
       whatsapp: String(formData.get("whatsapp") ?? "").replace(/\D/g, ""),
       supportPhone: String(formData.get("supportPhone") ?? "").trim(),
       freeDeliveryOver: Math.max(0, Math.round(freeOver * 100)),

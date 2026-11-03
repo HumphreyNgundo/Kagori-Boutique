@@ -32,6 +32,9 @@ export async function submitCheckout(
   const paymentMethod = String(formData.get("paymentMethod") ?? "MPESA") as PaymentMethod;
 
   if (name.length < 2) return { error: "Tell us who the order is for." };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    return { error: "Enter a valid email address — we send your receipt there." };
+  }
   const phone = normalisePhone(rawPhone);
   if (!phone) return { error: "Enter a valid Kenyan phone number, e.g. 0712 345 678." };
   if (!zoneId) return { error: "Choose delivery or pickup." };
@@ -49,7 +52,7 @@ export async function submitCheckout(
     couponCode: summary.discount > 0 ? summary.coupon!.code : null,
     name,
     phone,
-    email: email || null,
+    email,
     zoneId,
     address: address || null,
     paymentMethod,

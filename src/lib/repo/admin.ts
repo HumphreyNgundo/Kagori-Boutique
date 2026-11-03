@@ -274,6 +274,29 @@ export async function listMovements(limit = 60) {
   });
 }
 
+/* --------------------------------------------------------- Newsletter */
+
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+export async function subscribeToNewsletter(rawEmail: string) {
+  const email = rawEmail.trim().toLowerCase();
+  if (!EMAIL.test(email)) return { ok: false as const, error: "Enter a valid email address." };
+
+  return write((db) => {
+    db.subscribers ??= [];
+    // Signing up twice is not an error worth showing a customer.
+    if (!db.subscribers.some((s) => s.email === email)) {
+      db.subscribers.unshift({ id: randomId("sub"), email, createdAt: new Date().toISOString() });
+    }
+    return { ok: true as const };
+  });
+}
+
+export async function listSubscribers(limit = 200) {
+  const db = await read();
+  return (db.subscribers ?? []).slice(0, limit);
+}
+
 export async function saveSettings(patch: Partial<StoreSettings>, actor: Pick<User, "id" | "name">) {
   return write((db) => {
     db.settings = { ...db.settings, ...patch };

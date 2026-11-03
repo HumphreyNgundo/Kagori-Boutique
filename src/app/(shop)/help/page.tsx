@@ -4,7 +4,7 @@ import { getSettings } from "@/lib/repo/catalog";
 export const metadata = { title: "Delivery, returns & how it works" };
 
 const FAQ: [string, string][] = [
-  ["How do I order?", "Add what you want to the basket and press checkout. You give a name, a phone number and an address — that's it. No account, no password."],
+  ["How do I order?", "Add what you want to the basket and press checkout. You give a name, a phone number, an email for the receipt and an address — that's it."],
   ["How do I pay?", "M-Pesa (we send a prompt to your phone), card, or cash/M-Pesa to the rider on delivery within Nairobi."],
   ["How long does delivery take?", "Nairobi CBD and Westlands: same day for orders placed before 3pm. Greater Nairobi: next day. Upcountry: 1–3 days by courier."],
   ["How much is delivery?", "From KES 200 within the CBD. Free on orders over KES 10,000. Pickup from our CBD shop is always free."],

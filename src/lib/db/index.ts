@@ -56,6 +56,30 @@ const MIGRATIONS: { id: string; apply: (db: Database) => boolean }[] = [
     apply: applyPhotos,
   },
   {
+    // The shop trades under the brand on the logo, and the home page now
+    // carries an about panel, so the settings record needs those fields.
+    id: "store-identity-v1",
+    apply(db) {
+      const defaults = buildDatabase().settings;
+      let changed = false;
+      if (db.settings.storeName === "Kagorim Boutique") {
+        db.settings.storeName = defaults.storeName;
+        changed = true;
+      }
+      for (const key of ["tagline", "address", "hours"] as const) {
+        if (!db.settings[key]) {
+          db.settings[key] = defaults[key];
+          changed = true;
+        }
+      }
+      if (!db.subscribers) {
+        db.subscribers = [];
+        changed = true;
+      }
+      return changed;
+    },
+  },
+  {
     // A wig on a mannequin head replaced modelled hair on the bob. This one
     // overwrites rather than fills, so it only touches that product and only
     // where the record still holds the photo it is replacing.

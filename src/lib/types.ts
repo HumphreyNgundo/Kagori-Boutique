@@ -194,6 +194,10 @@ export interface AuditLog {
 
 export interface StoreSettings {
   storeName: string;
+  /** Shown in the about panel on the home page. */
+  tagline: string;
+  address: string;
+  hours: string;
   currency: string;
   whatsapp: string;
   supportPhone: string;
@@ -229,6 +233,13 @@ export interface HydratedLine {
   available: number;
 }
 
+/** Newsletter sign-up from the storefront footer. */
+export interface Subscriber {
+  id: string;
+  email: string;
+  createdAt: string;
+}
+
 export interface Database {
   /** Bumped when the seed itself changes; a mismatch re-seeds the store. */
   version: number;
@@ -248,5 +259,6 @@ export interface Database {
   coupons: Coupon[];
   movements: StockMovement[];
   audit: AuditLog[];
+  subscribers?: Subscriber[];
   settings: StoreSettings;
 }

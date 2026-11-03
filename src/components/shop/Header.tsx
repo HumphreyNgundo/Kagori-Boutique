@@ -14,7 +14,7 @@ export async function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:px-6">
-        <Link href="/" className="shrink-0" aria-label="Kagorim Boutique home">
+        <Link href="/" className="shrink-0" aria-label="Kagorim Enterprise home">
           <Wordmark />
         </Link>
 
@@ -55,14 +55,18 @@ export async function Header() {
 
           <ThemeToggle />
 
-          <Link
-            href={session ? homeFor(session.role) : "/login"}
-            className="grid h-9 w-9 place-items-center rounded-full border border-line-strong text-muted transition hover:border-brand hover:text-brand"
-            aria-label={session ? "Your account" : "Sign in"}
-            title={session ? `${session.name} — ${session.role.toLowerCase()}` : "Staff sign in"}
-          >
-            <UserRound size={16} />
-          </Link>
+          {/* Staff reach the console at /admin directly; the shop does not
+              advertise a sign-in. Signed-in staff keep a way back. */}
+          {session && (
+            <Link
+              href={homeFor(session.role)}
+              className="grid h-9 w-9 place-items-center rounded-full border border-line-strong text-muted transition hover:border-brand hover:text-brand"
+              aria-label="Your workspace"
+              title={`${session.name} — ${session.role.toLowerCase()}`}
+            >
+              <UserRound size={16} />
+            </Link>
+          )}
 
           <Link href="/cart" className="btn btn-ink relative !px-4" aria-label={`Basket, ${count} items`}>
             <ShoppingBag size={16} />

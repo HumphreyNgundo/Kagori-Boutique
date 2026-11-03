@@ -22,7 +22,7 @@ export default async function CheckoutPage() {
       </Link>
       <h1 className="mt-3 text-3xl font-extrabold tracking-tight">Checkout</h1>
       <p className="mt-1 text-sm text-muted">
-        {summary.count} {summary.count === 1 ? "item" : "items"} · no account required
+        {summary.count} {summary.count === 1 ? "item" : "items"} in your basket
       </p>
 
       <div className="mt-8">

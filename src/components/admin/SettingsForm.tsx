@@ -82,6 +82,24 @@ export function SettingsForm({ settings }: { settings: StoreSettings }) {
         </div>
       </div>
 
+      <div>
+        <label className="label" htmlFor="tagline">
+          Tagline <span className="font-normal text-subtle">— the line under the logo and in the hero</span>
+        </label>
+        <input id="tagline" name="tagline" defaultValue={settings.tagline} className="input" />
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="label" htmlFor="address">Shop address</label>
+          <input id="address" name="address" defaultValue={settings.address} className="input" />
+        </div>
+        <div>
+          <label className="label" htmlFor="hours">Opening hours</label>
+          <input id="hours" name="hours" defaultValue={settings.hours} className="input" />
+        </div>
+      </div>
+
       <fieldset>
         <legend className="label">Payment methods offered at checkout</legend>
         <div className="grid gap-2 sm:grid-cols-3">

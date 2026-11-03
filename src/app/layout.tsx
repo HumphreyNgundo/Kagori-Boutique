@@ -11,14 +11,14 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Kagorim Boutique — wigs, lashes, shoes & bags in Nairobi",
-    template: "%s · Kagorim Boutique",
+    default: "Kagorim Enterprise — wigs, lashes, bags & footwear in Nairobi",
+    template: "%s · Kagorim Enterprise",
   },
   description:
-    "Shop wigs, lash sets, heels, flats, sneakers and handbags. Self-checkout with M-Pesa, delivery across Kenya, and live order tracking.",
+    "Kagorim Enterprise — shop the collection, pay with M-Pesa, and track your order to your door anywhere in Kenya.",
   openGraph: {
-    title: "Kagorim Boutique",
-    description: "Wigs, lashes, shoes and bags — ordered in under two minutes.",
+    title: "Kagorim Enterprise",
+    description: "Shop the collection and track every order to your door.",
     type: "website",
   },
 };

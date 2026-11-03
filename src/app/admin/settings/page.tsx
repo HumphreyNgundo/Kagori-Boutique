@@ -3,7 +3,7 @@ import { BackfillPhotos, ResetDemo, SettingsForm } from "@/components/admin/Sett
 import { PageHeader, Panel } from "@/components/admin/ui";
 import { requirePermission } from "@/lib/auth/session";
 import { getSettings } from "@/lib/repo/catalog";
-import { photoCoverage } from "@/lib/repo/admin";
+import { listSubscribers, photoCoverage } from "@/lib/repo/admin";
 import { mediaConfigured } from "@/lib/media";
 import { driver } from "@/lib/db";
 
@@ -12,7 +12,11 @@ export const metadata = { title: "Settings" };
 
 export default async function SettingsPage() {
   await requirePermission("settings:manage");
-  const [settings, coverage] = await Promise.all([getSettings(), photoCoverage()]);
+  const [settings, coverage, subscribers] = await Promise.all([
+    getSettings(),
+    photoCoverage(),
+    listSubscribers(),
+  ]);
   const mediaReady = mediaConfigured();
 
   return (
@@ -61,6 +65,23 @@ export default async function SettingsPage() {
                 </div>
               </li>
             </ul>
+          </Panel>
+
+          <Panel title="Newsletter">
+            <p className="text-sm">
+              <span className="text-2xl font-extrabold tabular-nums">{subscribers.length}</span>{" "}
+              <span className="text-muted">
+                {subscribers.length === 1 ? "subscriber" : "subscribers"} from the storefront footer
+              </span>
+            </p>
+            {subscribers.length > 0 && (
+              <ul className="mt-3 space-y-1 text-xs text-subtle">
+                {subscribers.slice(0, 5).map((s) => (
+                  <li key={s.id} className="truncate">{s.email}</li>
+                ))}
+                {subscribers.length > 5 && <li>and {subscribers.length - 5} more…</li>}
+              </ul>
+            )}
           </Panel>
 
           <Panel title="Product photos">
