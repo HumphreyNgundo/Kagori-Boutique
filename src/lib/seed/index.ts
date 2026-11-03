@@ -27,7 +27,7 @@ export const COUPONS: Coupon[] = [
 
 export const SETTINGS: StoreSettings = {
   storeName: "Kagorim Enterprise",
-  tagline: "Wigs, lashes, bags and footwear, picked for Nairobi and delivered countrywide.",
+  tagline: "Wigs, lashes and handbags, picked for Nairobi and delivered countrywide.",
   address: "Kagorim Enterprise, Taveta Road, Nairobi CBD",
   hours: "Mon–Sat 9am–7pm · Sun by appointment",
   currency: "KES",

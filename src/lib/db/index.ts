@@ -80,6 +80,35 @@ const MIGRATIONS: { id: string; apply: (db: Database) => boolean }[] = [
     },
   },
   {
+    // The shop stopped carrying footwear. Existing records are retired rather
+    // than deleted: past orders reference these products, and reports read
+    // through them. They stay in the console, marked hidden, and can be
+    // brought back by publishing them again.
+    id: "retire-footwear-v1",
+    apply(db) {
+      const shelves = new Set(["heels", "flat-shoes", "doll-shoes", "sports-shoes"]);
+      let changed = false;
+
+      const retiredIds = new Set<string>();
+      for (const category of db.categories) {
+        if (!shelves.has(category.slug)) continue;
+        retiredIds.add(category.id);
+        if (category.active) {
+          category.active = false;
+          changed = true;
+        }
+      }
+
+      for (const product of db.products) {
+        if (!retiredIds.has(product.categoryId) || !product.active) continue;
+        product.active = false;
+        changed = true;
+      }
+
+      return changed;
+    },
+  },
+  {
     // A wig on a mannequin head replaced modelled hair on the bob. This one
     // overwrites rather than fills, so it only touches that product and only
     // where the record still holds the photo it is replacing.

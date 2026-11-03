@@ -102,8 +102,10 @@ export async function stockRows(onlyLow = false): Promise<StockRow[]> {
   const products = new Map(db.products.map((p) => [p.id, p]));
   const categories = new Map(db.categories.map((c) => [c.id, c]));
 
+  // A hidden product's stock is not stock anyone can sell, so it stays out of
+  // the inventory view; its rows remain on the product page.
   const rows = db.variants
-    .filter((v) => v.active)
+    .filter((v) => v.active && products.get(v.productId)?.active)
     .map((v) => {
       const product = products.get(v.productId)!;
       const available = availableOf(v);

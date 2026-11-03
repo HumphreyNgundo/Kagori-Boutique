@@ -40,33 +40,9 @@ export const PRODUCT_PHOTOS: Record<string, string[]> = {
   "precision-lash-applicator": [square("photo-1516975080664-ed2fc6a32937")],
   "lash-cleanser-foam": [square("photo-1600857544200-b2f666a9a2ec")],
 
-  /* Heels */
-  "amani-block-heel-sandal": [
-    square("photo-1535043934128-cf0b28d52f95"),
-    square("photo-1543163521-1bf539c55dd2"),
-  ],
-  "nova-pointed-stiletto": [
-    square("photo-1596703263926-eb0762ee17e4"),
-    square("photo-1573100925118-870b8efc799d"),
-  ],
-  "mara-kitten-heel-mule": [
-    square("photo-1518049362265-d5b2a6467637"),
-    square("photo-1515347619252-60a4bf4fff4f"),
-  ],
 
-  /* Flat shoes */
-  "imani-leather-loafer": [square("photo-1533867617858-e7b97e060509")],
-  "pwani-woven-slide": [square("photo-1603487742131-4160ec999306")],
-  "kesi-pointed-flat": [square("photo-1519415943484-9fa1873496d4")],
 
-  /* Doll shoes */
-  "lilo-mary-jane": [square("photo-1560343090-f0409e92791a")],
-  "sasa-ballet-pump": [square("photo-1562273138-f46be4ebdf33")],
 
-  /* Sports shoes */
-  "kasi-mesh-runner": [square("photo-1560769629-975ec94e6a86")],
-  "rally-court-sneaker": [square("photo-1549298916-b41d501d3772")],
-  "studio-cross-trainer": [square("photo-1465453869711-7e174808ace9")],
 
   /* Handbags */
   "sauti-structured-tote": [
@@ -87,10 +63,6 @@ export const CATEGORY_PHOTOS: Record<string, string> = {
   "wig-accessories": square("photo-1527799820374-dcf8d9d4a388"),
   lashes: square("photo-1487412947147-5cebf100ffc2"),
   "lash-accessories": square("photo-1596462502278-27bfdc403348"),
-  heels: square("photo-1596703263926-eb0762ee17e4"),
-  "flat-shoes": square("photo-1533867617858-e7b97e060509"),
-  "doll-shoes": square("photo-1560343090-f0409e92791a"),
-  "sports-shoes": square("photo-1600185365926-3a2ce3cdb9eb"),
   handbags: square("photo-1591561954557-26941169b49e"),
 };
 

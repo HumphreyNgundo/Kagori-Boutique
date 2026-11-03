@@ -9,7 +9,7 @@ const FAQ: [string, string][] = [
   ["How long does delivery take?", "Nairobi CBD and Westlands: same day for orders placed before 3pm. Greater Nairobi: next day. Upcountry: 1–3 days by courier."],
   ["How much is delivery?", "From KES 200 within the CBD. Free on orders over KES 10,000. Pickup from our CBD shop is always free."],
   ["Can I track my order?", "Yes. Every order gets a code like KGB-7F3Q2A. Enter it on the Track page from any device and you'll see exactly where the parcel is."],
-  ["What if the size is wrong?", "Exchange within 7 days, unworn and with the packaging. Wigs and lashes can't be exchanged once opened, for hygiene reasons."],
+  ["What if it isn't right?", "Exchange within 7 days, unused and with the packaging. Wigs and lashes can't be exchanged once opened, for hygiene reasons."],
   ["Are the wigs human hair?", "Each product says so on its page. Where it says human hair, it is 100% human hair and can be dyed and heat-styled."],
 ];
 

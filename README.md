@@ -30,7 +30,7 @@ afterwards without phoning anyone.**
 
 | Module | What it covers | Where |
 |---|---|---|
-| Catalogue | 9 categories, 28 products, 80+ variants with per-family option axes (wig length/density, shoe size, lash style) | `src/lib/repo/catalog.ts` |
+| Catalogue | 5 categories, 17 products, 40+ variants with per-family option axes (wig length/density, shoe size, lash style) | `src/lib/repo/catalog.ts` |
 | Storefront | Home, category pages, search, facets, product detail, variant picker | `src/app/(shop)` |
 | Cart & self-checkout | Cookie basket, coupons, delivery zones, M-Pesa / card / pay-on-delivery | `src/lib/cart.ts`, `src/lib/actions/checkout.ts` |
 | Orders & tracking | Lifecycle state machine, event timeline, public tracking page | `src/lib/repo/orders.ts` |
