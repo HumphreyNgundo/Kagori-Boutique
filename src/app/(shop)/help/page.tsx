@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getSettings } from "@/lib/repo/catalog";
 
+export const dynamic = "force-dynamic";
 export const metadata = { title: "Delivery, returns & how it works" };
 
 const FAQ: [string, string][] = [

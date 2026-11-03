@@ -59,14 +59,28 @@ function publicBlobUrl(): string | null {
   return `https://${storeId}.public.blob.vercel-storage.com/${BLOB_KEY}`;
 }
 
+/**
+ * Next.js signals control flow by throwing: a prerender that touches a no-store
+ * fetch, a redirect, a notFound. Those errors carry a `digest` and the framework
+ * matches on the object it threw, so they must propagate untouched — wrapping
+ * one in a new Error turns "render this route dynamically" into a build failure.
+ */
+function isFrameworkSignal(error: unknown): boolean {
+  return typeof (error as { digest?: unknown } | null)?.digest === "string";
+}
+
 async function fetchSnapshot(url: string): Promise<Response> {
   try {
     return await fetch(url, { cache: "no-store" });
   } catch (cause) {
+    if (isFrameworkSignal(cause)) throw cause;
     // One retry: a single dropped connection must not look like an empty store.
-    return await fetch(url, { cache: "no-store" }).catch(() => {
-      throw new Error(`Blob store unreachable: ${(cause as Error).message}`);
-    });
+    try {
+      return await fetch(url, { cache: "no-store" });
+    } catch (retry) {
+      if (isFrameworkSignal(retry)) throw retry;
+      throw cause;
+    }
   }
 }
 
