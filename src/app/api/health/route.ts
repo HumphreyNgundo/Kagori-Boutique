@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { read, driver } from "@/lib/db";
+import { buildStamp } from "@/lib/build";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,7 @@ export async function GET() {
     const db = await read();
     return NextResponse.json({
       ok: true,
+      build: buildStamp(),
       driver: driver.name,
       durable: driver.durable,
       seedVersion: db.version,

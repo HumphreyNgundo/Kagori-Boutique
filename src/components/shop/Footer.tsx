@@ -3,6 +3,7 @@ import { MessageCircle, Phone } from "lucide-react";
 import { Wordmark } from "@/components/Logo";
 import { Newsletter } from "@/components/shop/Newsletter";
 import { listCategories, getSettings } from "@/lib/repo/catalog";
+import { buildStamp } from "@/lib/build";
 
 export async function Footer() {
   const [categories, settings] = await Promise.all([listCategories(), getSettings()]);
@@ -62,7 +63,10 @@ export async function Footer() {
 
       <div className="border-t border-line">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-5 text-xs text-subtle sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p>© {new Date().getFullYear()} {settings.storeName}. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} {settings.storeName}. All rights reserved.
+            <span className="ml-2 opacity-60">build {buildStamp()}</span>
+          </p>
           <p>Nairobi, Kenya · Prices in {settings.currency}</p>
         </div>
       </div>
