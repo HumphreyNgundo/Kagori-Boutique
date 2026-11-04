@@ -38,7 +38,7 @@ export async function Header() {
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-subtle" />
             <input
               name="q"
-              placeholder="Search wigs, heels, lashes…"
+              placeholder="Search the collection…"
               aria-label="Search products"
               className="input !rounded-full !py-2 pl-9 text-sm"
             />
