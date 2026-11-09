@@ -50,6 +50,21 @@ function Silhouette({ family, dark }: { family: ProductFamily; dark: boolean }) 
           <path d="M72 66h56c8 0 14 7 13 15l-8 70c-1 9-8 15-17 15h-32c-9 0-16-6-17-15l-8-70c-1-8 5-15 13-15z" fill={fill} />
         </g>
       );
+    case "EXTENSION":
+      return (
+        <g>
+          <rect x="62" y="40" width="76" height="14" rx="5" fill={soft} />
+          <path d="M66 54c-4 40 2 78-6 112M84 54c-2 42 4 80-2 112M100 54c0 42 0 80 0 112M116 54c2 42-4 80 2 112M134 54c4 40-2 78 6 112" stroke={fill} strokeWidth="7" fill="none" strokeLinecap="round" />
+        </g>
+      );
+    case "WIG_CARE":
+      return (
+        <g>
+          <rect x="88" y="34" width="24" height="18" rx="4" fill={soft} />
+          <path d="M80 52h40c6 0 10 4 10 10v92c0 8-6 14-14 14H84c-8 0-14-6-14-14V62c0-6 4-10 10-10z" fill={fill} />
+          <rect x="80" y="96" width="40" height="22" rx="4" fill={soft} />
+        </g>
+      );
     case "LASH":
       return (
         <g stroke={fill} strokeWidth="6" strokeLinecap="round" fill="none">

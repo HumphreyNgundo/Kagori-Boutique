@@ -413,6 +413,8 @@ export async function listProductsForAdmin() {
 export const FAMILY_AXES: Record<ProductFamily, string[]> = {
   WIG: ["Length", "Density", "Colour"],
   WIG_ACCESSORY: ["Size"],
+  EXTENSION: ["Length", "Colour"],
+  WIG_CARE: ["Size"],
   LASH: ["Style", "Length"],
   LASH_ACCESSORY: ["Size"],
   FOOTWEAR: ["Size", "Colour"],

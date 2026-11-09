@@ -1,6 +1,7 @@
 import "server-only";
 import type { Database } from "@/lib/types";
 import { buildDatabase, SEED_VERSION } from "@/lib/seed";
+import { CATEGORIES, buildCatalog } from "@/lib/seed/catalog";
 import { photosFor } from "@/lib/seed/photos";
 import { selectDriver, type PersistenceDriver } from "@/lib/db/driver";
 
@@ -120,6 +121,73 @@ const MIGRATIONS: { id: string; apply: (db: Database) => boolean }[] = [
       const isStock = product.images.every((url) => url.includes("images.unsplash.com"));
       if (!product.images.length || !isStock) return false;
       product.images = [...replacement];
+      return true;
+    },
+  },
+  {
+    // The shop now centres on hair: lashes, lash accessories and handbags come
+    // off the storefront and Extensions and Wig Care take their place. As with
+    // footwear, the old shelves are retired rather than deleted so past orders
+    // and reports still resolve, and staff can publish them again.
+    id: "extensions-wig-care-v1",
+    apply(db) {
+      const retired = new Set(["lashes", "lash-accessories", "handbags"]);
+      let changed = false;
+
+      const retiredIds = new Set<string>();
+      for (const category of db.categories) {
+        if (!retired.has(category.slug)) continue;
+        retiredIds.add(category.id);
+        if (category.active) {
+          category.active = false;
+          changed = true;
+        }
+      }
+      for (const product of db.products) {
+        if (!retiredIds.has(product.categoryId) || !product.active) continue;
+        product.active = false;
+        changed = true;
+      }
+
+      const added = new Set(["extensions", "wig-care"]);
+      const addedIds = new Set<string>();
+      for (const category of CATEGORIES) {
+        if (!added.has(category.slug)) continue;
+        addedIds.add(category.id);
+        if (db.categories.some((c) => c.slug === category.slug)) continue;
+        db.categories.push({ ...category });
+        changed = true;
+      }
+
+      const catalog = buildCatalog();
+      const now = new Date().toISOString();
+      for (const product of catalog.products) {
+        if (!addedIds.has(product.categoryId)) continue;
+        if (db.products.some((p) => p.slug === product.slug || p.id === product.id)) continue;
+        db.products.push({ ...product, createdAt: now });
+        for (const variant of catalog.variants) {
+          if (variant.productId !== product.id) continue;
+          if (db.variants.some((v) => v.id === variant.id || v.sku === variant.sku)) continue;
+          db.variants.push({ ...variant });
+        }
+        changed = true;
+      }
+
+      return changed;
+    },
+  },
+  {
+    // The tagline feeds the hero and the footer. Older stores still carry copy
+    // that mentions shoes and "no account needed"; anything staff wrote
+    // themselves is left alone.
+    id: "tagline-hair-v1",
+    apply(db) {
+      const current = db.settings.tagline ?? "";
+      const outdated =
+        /shoes|no account needed/i.test(current) ||
+        current === "Wigs, lashes and handbags, picked for Nairobi and delivered countrywide.";
+      if (!outdated) return false;
+      db.settings.tagline = buildDatabase().settings.tagline;
       return true;
     },
   },

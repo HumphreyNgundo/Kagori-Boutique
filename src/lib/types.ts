@@ -27,7 +27,15 @@ export interface User {
 /* ------------------------------------------------------------------ */
 
 /** Attribute families drive which variant options a product exposes. */
-export type ProductFamily = "WIG" | "WIG_ACCESSORY" | "LASH" | "LASH_ACCESSORY" | "FOOTWEAR" | "BAG";
+export type ProductFamily =
+  | "WIG"
+  | "WIG_ACCESSORY"
+  | "EXTENSION"
+  | "WIG_CARE"
+  | "LASH"
+  | "LASH_ACCESSORY"
+  | "FOOTWEAR"
+  | "BAG";
 
 export interface Category {
   id: string;

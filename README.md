@@ -2,7 +2,7 @@
 
 # KAGORIM BOUTIQUE
 
-**Wigs · lashes · shoes · bags — a self-checkout storefront with order tracking and a role-based back office.**
+**Wigs · extensions · wig care — a self-checkout storefront with order tracking and a role-based back office.**
 
 Next.js 15 · TypeScript · Tailwind v4 · Server Actions · Vercel
 
@@ -30,7 +30,7 @@ afterwards without phoning anyone.**
 
 | Module | What it covers | Where |
 |---|---|---|
-| Catalogue | 5 categories, 17 products, 40+ variants with per-family option axes (wig length/density, shoe size, lash style) | `src/lib/repo/catalog.ts` |
+| Catalogue | 4 categories, 16 products, 30+ variants with per-family option axes (wig length/density, extension length/colour) | `src/lib/repo/catalog.ts` |
 | Storefront | Home, category pages, search, facets, product detail, variant picker | `src/app/(shop)` |
 | Cart & self-checkout | Cookie basket, coupons, delivery zones, M-Pesa / card / pay-on-delivery | `src/lib/cart.ts`, `src/lib/actions/checkout.ts` |
 | Orders & tracking | Lifecycle state machine, event timeline, public tracking page | `src/lib/repo/orders.ts` |

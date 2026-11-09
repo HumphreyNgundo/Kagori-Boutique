@@ -57,9 +57,9 @@ export default async function HomePage() {
               <ShieldCheck size={13} /> Nairobi · countrywide delivery
             </span>
             <h1 className="mt-5 text-balance text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-              The collection that arrives{" "}
+              Hair that turns heads,{" "}
               <span className="bg-gradient-to-r from-[var(--brand-violet)] to-[var(--brand-cyan)] bg-clip-text text-transparent">
-                when we said it would.
+                delivered when we promised.
               </span>
             </h1>
             <p className="mt-5 max-w-lg text-base leading-relaxed text-muted sm:text-lg">

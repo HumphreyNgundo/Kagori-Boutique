@@ -1,14 +1,12 @@
 import Link from "next/link";
-import { Package, Search, ShoppingBag, UserRound } from "lucide-react";
+import { Package, Search, ShoppingBag } from "lucide-react";
 import { Wordmark } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { listCategories } from "@/lib/repo/catalog";
 import { readCart } from "@/lib/cart";
-import { getSession } from "@/lib/auth/session";
-import { homeFor } from "@/lib/auth/rbac";
 
 export async function Header() {
-  const [categories, cart, session] = await Promise.all([listCategories(), readCart(), getSession()]);
+  const [categories, cart] = await Promise.all([listCategories(), readCart()]);
   const count = cart.lines.reduce((sum, l) => sum + l.quantity, 0);
 
   return (
@@ -55,19 +53,8 @@ export async function Header() {
 
           <ThemeToggle />
 
-          {/* Staff reach the console at /admin directly; the shop does not
-              advertise a sign-in. Signed-in staff keep a way back. */}
-          {session && (
-            <Link
-              href={homeFor(session.role)}
-              className="grid h-9 w-9 place-items-center rounded-full border border-line-strong text-muted transition hover:border-brand hover:text-brand"
-              aria-label="Your workspace"
-              title={`${session.name} — ${session.role.toLowerCase()}`}
-            >
-              <UserRound size={16} />
-            </Link>
-          )}
-
+          {/* No account button: shoppers check out as guests, and staff reach
+              the console at /admin directly. */}
           <Link href="/cart" className="btn btn-ink relative !px-4" aria-label={`Basket, ${count} items`}>
             <ShoppingBag size={16} />
             <span className="hidden sm:inline">Basket</span>

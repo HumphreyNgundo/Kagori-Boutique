@@ -33,7 +33,7 @@ export default async function ShopPage({
       subtitle={
         params.q
           ? undefined
-          : "Wigs, lashes, heels, flats, doll shoes, sneakers and bags — everything we stock, in one place."
+          : "Wigs, extensions, accessories and wig care — everything we stock, in one place."
       }
     />
   );

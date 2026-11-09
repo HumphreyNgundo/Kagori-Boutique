@@ -11,7 +11,7 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Kagorim Enterprise — wigs, lashes & handbags in Nairobi",
+    default: "Kagorim Enterprise — wigs, extensions & wig care in Nairobi",
     template: "%s · Kagorim Enterprise",
   },
   description:

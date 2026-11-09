@@ -22,7 +22,7 @@ export default async function CartPage() {
         </span>
         <h1 className="text-2xl font-bold tracking-tight">Your basket is empty</h1>
         <p className="text-sm text-muted">
-          Browse wigs, lashes, shoes and bags — add what you like and check out in two minutes.
+          Browse wigs, extensions and wig care — add what you like and check out in two minutes.
         </p>
         <Link href="/shop" className="btn btn-primary">Start shopping <ArrowRight size={16} /></Link>
       </div>

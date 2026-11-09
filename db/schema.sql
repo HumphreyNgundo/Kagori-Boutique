@@ -36,7 +36,7 @@ CREATE TABLE user_permission_overrides (
 
 -- ------------------------------------------------------------- CATALOG
 CREATE TYPE product_family AS ENUM
-  ('WIG','WIG_ACCESSORY','LASH','LASH_ACCESSORY','FOOTWEAR','BAG');
+  ('WIG','WIG_ACCESSORY','EXTENSION','WIG_CARE','LASH','LASH_ACCESSORY','FOOTWEAR','BAG');
 
 CREATE TABLE categories (
   id       UUID PRIMARY KEY DEFAULT gen_random_uuid(),
