@@ -70,18 +70,30 @@ function isFrameworkSignal(error: unknown): boolean {
 }
 
 async function fetchSnapshot(url: string): Promise<Response> {
+  const request = () =>
+    fetch(url, { cache: "no-store", headers: { "cache-control": "no-cache" } });
   try {
-    return await fetch(url, { cache: "no-store" });
+    return await request();
   } catch (cause) {
     if (isFrameworkSignal(cause)) throw cause;
     // One retry: a single dropped connection must not look like an empty store.
     try {
-      return await fetch(url, { cache: "no-store" });
+      return await request();
     } catch (retry) {
       if (isFrameworkSignal(retry)) throw retry;
       throw cause;
     }
   }
+}
+
+/**
+ * A 404 served before the blob existed can sit in the CDN for the path, so the
+ * confirmation read has to miss that cache or it reports a store that plainly
+ * exists as unreadable — which takes the whole shop down on a cold instance.
+ * The blob is public, so an ignored query parameter is a safe cache key change.
+ */
+function cacheBusted(url: string): string {
+  return `${url}${url.includes("?") ? "&" : "?"}__at=${Date.now()}`;
 }
 
 export const blobDriver: PersistenceDriver = {
@@ -97,7 +109,7 @@ export const blobDriver: PersistenceDriver = {
       const { head } = await import("@vercel/blob");
       const existing = await head(BLOB_KEY).catch(() => null);
       if (!existing) return null;
-      const retry = await fetchSnapshot(existing.url);
+      const retry = await fetchSnapshot(cacheBusted(existing.url));
       if (!retry.ok) throw new Error(`Blob exists but could not be read (${retry.status}).`);
       return (await retry.json()) as Database;
     }
