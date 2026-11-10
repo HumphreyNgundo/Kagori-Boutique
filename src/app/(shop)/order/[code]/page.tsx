@@ -37,7 +37,7 @@ export default async function OrderPage({
         <div className="flex flex-wrap justify-center gap-2">
           <Link href="/track" className="btn btn-primary btn-sm">Try another code</Link>
           <a
-            href={`https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(`Hi Kagorim, I can't find my order ${code}`)}`}
+            href={`https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(`Hi Bello Beauty, I can't find my order ${code}`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-outline btn-sm"
@@ -201,7 +201,7 @@ export default async function OrderPage({
 
           <div className="flex gap-2">
             <a
-              href={`https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(`Hi Kagorim, about order ${order.code}`)}`}
+              href={`https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(`Hi Bello Beauty, about order ${order.code}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-outline btn-sm flex-1"

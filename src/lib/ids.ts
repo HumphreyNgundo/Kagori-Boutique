@@ -5,11 +5,11 @@ export function randomId(prefix: string): string {
   return `${prefix}_${Date.now().toString(36)}${rnd}`;
 }
 
-/** Tracking code a customer can read over WhatsApp: KGB-7F3Q2A */
+/** Tracking code a customer can read over WhatsApp: BB-7F3Q2A */
 export function trackingCode(): string {
   let out = "";
   for (let i = 0; i < 6; i++) out += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
-  return `KGB-${out}`;
+  return `BB-${out}`;
 }
 
 export function mpesaRef(): string {

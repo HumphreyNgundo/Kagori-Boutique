@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { MessageCircle, Phone } from "lucide-react";
+import { Instagram, MessageCircle, Music2, Phone } from "lucide-react";
 import { Wordmark } from "@/components/Logo";
 import { Newsletter } from "@/components/shop/Newsletter";
+import { SOCIALS } from "@/lib/brand";
 import { listCategories, getSettings } from "@/lib/repo/catalog";
 import { buildStamp } from "@/lib/build";
 
@@ -26,7 +27,26 @@ export async function Footer() {
             <a href={`tel:${settings.supportPhone.replace(/\s/g, "")}`} className="btn btn-outline btn-sm">
               <Phone size={14} /> {settings.supportPhone}
             </a>
+            <a
+              href={SOCIALS.instagram.url}
+              className="btn btn-outline btn-sm"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Instagram ${SOCIALS.instagram.handle}`}
+            >
+              <Instagram size={14} /> Instagram
+            </a>
+            <a
+              href={SOCIALS.tiktok.url}
+              className="btn btn-outline btn-sm"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`TikTok ${SOCIALS.tiktok.handle}`}
+            >
+              <Music2 size={14} /> TikTok
+            </a>
           </div>
+          <p className="mt-4 text-xs leading-relaxed text-subtle">{settings.address}</p>
         </div>
 
         <div>

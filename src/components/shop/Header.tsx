@@ -14,13 +14,13 @@ export async function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:px-6">
-        <Link href="/" className="shrink-0" aria-label="Kagorim Enterprise home">
+        <Link href="/" className="shrink-0" aria-label="Bello Beauty home">
           <Wordmark />
         </Link>
 
         <nav className="ml-4 hidden items-center gap-1 lg:flex">
           <Link href="/shop" className="rounded-full px-3 py-2 text-sm font-medium text-muted transition hover:bg-surface-2 hover:text-ink">
-            All products
+            All
           </Link>
           {categories.slice(0, 5).map((c) => (
             <Link
@@ -38,7 +38,7 @@ export async function Header() {
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-subtle" />
             <input
               name="q"
-              placeholder="Search the collection…"
+              placeholder="Search wigs, bundles, haircare…"
               aria-label="Search products"
               className="input !rounded-full !py-2 pl-9 text-sm"
             />

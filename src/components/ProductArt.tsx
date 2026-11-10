@@ -43,45 +43,35 @@ function Silhouette({ family, dark }: { family: ProductFamily; dark: boolean }) 
           <ellipse cx="100" cy="92" rx="26" ry="30" fill={soft} />
         </g>
       );
-    case "WIG_ACCESSORY":
+    case "EXTENSION":
       return (
         <g>
-          <rect x="84" y="40" width="32" height="26" rx="8" fill={soft} />
-          <path d="M72 66h56c8 0 14 7 13 15l-8 70c-1 9-8 15-17 15h-32c-9 0-16-6-17-15l-8-70c-1-8 5-15 13-15z" fill={fill} />
+          <rect x="62" y="44" width="76" height="12" rx="6" fill={soft} />
+          <path d="M70 56c0 44 -6 56 -4 84 1 12 10 14 12 2 3-20 0-46 2-62" stroke={fill} strokeWidth="9" strokeLinecap="round" fill="none" />
+          <path d="M92 56c0 44 -5 58 -3 86 1 12 10 14 12 2 3-20 -1-48 1-64" stroke={fill} strokeWidth="9" strokeLinecap="round" fill="none" />
+          <path d="M116 56c0 44 -5 56 -3 84 1 12 10 14 12 2 3-20 -1-46 1-62" stroke={fill} strokeWidth="9" strokeLinecap="round" fill="none" />
         </g>
       );
-    case "LASH":
-      return (
-        <g stroke={fill} strokeWidth="6" strokeLinecap="round" fill="none">
-          <path d="M40 116c22-34 98-34 120 0" />
-          <path d="M48 104c-4-12-6-20-4-30" />
-          <path d="M70 92c-4-14-4-24 0-34" />
-          <path d="M100 86c0-16 2-26 8-36" />
-          <path d="M130 92c4-14 8-22 16-30" />
-          <path d="M152 104c6-10 10-16 18-22" />
-        </g>
-      );
-    case "LASH_ACCESSORY":
+    case "HAIRCARE":
       return (
         <g>
-          <path d="M92 36h16v30h-16z" fill={soft} />
-          <path d="M82 66h36l10 74c1 10-6 18-16 18h-24c-10 0-17-8-16-18z" fill={fill} />
-          <rect x="88" y="104" width="24" height="6" rx="3" fill={soft} />
+          <rect x="88" y="34" width="24" height="22" rx="6" fill={soft} />
+          <path d="M74 56h52c9 0 16 8 15 17l-9 74c-1 9-8 15-17 15H85c-9 0-16-6-17-15l-9-74c-1-9 6-17 15-17z" fill={fill} />
+          <rect x="80" y="96" width="40" height="7" rx="3.5" fill={soft} />
         </g>
       );
-    case "FOOTWEAR":
+    case "HAIR_ACCESSORY":
       return (
         <g>
-          <path d="M34 134c0-10 4-16 14-18 18-4 30-12 42-26 10-12 18-18 30-18 10 0 16 6 18 16 3 16 14 26 28 30 10 3 14 8 14 16 0 8-6 14-16 14H48c-9 0-14-5-14-14z" fill={fill} />
-          <path d="M34 140h146c0 12-8 20-20 20H54c-12 0-20-8-20-20z" fill={soft} />
-        </g>
-      );
-    case "BAG":
-      return (
-        <g>
-          <path d="M76 66c0-18 10-30 24-30s24 12 24 30" stroke={fill} strokeWidth="7" fill="none" strokeLinecap="round" />
-          <path d="M52 70h96c6 0 11 5 12 11l8 66c1 10-6 19-17 19H49c-11 0-18-9-17-19l8-66c1-6 6-11 12-11z" fill={fill} />
-          <rect x="84" y="96" width="32" height="8" rx="4" fill={soft} />
+          <rect x="52" y="60" width="96" height="26" rx="12" fill={fill} />
+          <g stroke={fill} strokeWidth="7" strokeLinecap="round">
+            <path d="M64 86v44" />
+            <path d="M82 86v52" />
+            <path d="M100 86v56" />
+            <path d="M118 86v52" />
+            <path d="M136 86v44" />
+          </g>
+          <rect x="62" y="66" width="76" height="7" rx="3.5" fill={soft} />
         </g>
       );
   }

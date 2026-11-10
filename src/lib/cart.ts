@@ -4,8 +4,8 @@ import { read } from "@/lib/db";
 import { availableOf } from "@/lib/repo/catalog";
 import type { Cart, Coupon, HydratedLine } from "@/lib/types";
 
-export const CART_COOKIE = "kagorim_cart";
-export const ORDERS_COOKIE = "kagorim_orders"; // tracking codes this browser placed
+export const CART_COOKIE = "bello_cart";
+export const ORDERS_COOKIE = "bello_orders"; // tracking codes this browser placed
 
 const EMPTY: Cart = { lines: [], coupon: null };
 

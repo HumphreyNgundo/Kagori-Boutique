@@ -4,12 +4,24 @@ import { photosFor } from "@/lib/seed/photos";
 /* Prices are minor units: KES 6,500 -> 650000 */
 const K = (shillings: number) => shillings * 100;
 
+/**
+ * Four shelves, in the order the tabs read: All · Wigs · Extensions ·
+ * Haircare · Hair accessories. Wigs are cut three ways — headband, closure
+ * and frontal — which are tags on the product rather than shelves of their
+ * own, so the top-level navigation stays short.
+ */
 export const CATEGORIES: Category[] = [
-  { id: "cat_wigs", slug: "wigs", name: "Wigs", tagline: "Human hair & premium HD lace units", family: "WIG", position: 1, active: true },
-  { id: "cat_wig_acc", slug: "wig-accessories", name: "Wig Accessories", tagline: "Caps, glue, sprays & styling tools", family: "WIG_ACCESSORY", position: 2, active: true },
-  { id: "cat_lashes", slug: "lashes", name: "Lashes", tagline: "Mink, volume & classic strips", family: "LASH", position: 3, active: true },
-  { id: "cat_lash_acc", slug: "lash-accessories", name: "Lash Accessories", tagline: "Glue, applicators & aftercare", family: "LASH_ACCESSORY", position: 4, active: true },
-  { id: "cat_bags", slug: "handbags", name: "Handbags", tagline: "Totes, shoulder bags & clutches", family: "BAG", position: 9, active: true },
+  { id: "cat_wigs", slug: "wigs", name: "Wigs", tagline: "Headband, closure & frontal units", family: "WIG", position: 1, active: true },
+  { id: "cat_extensions", slug: "extensions", name: "Extensions", tagline: "Bundles, clip-ins & ponytails", family: "EXTENSION", position: 2, active: true },
+  { id: "cat_haircare", slug: "haircare", name: "Haircare", tagline: "Wash, oil & keep every unit soft", family: "HAIRCARE", position: 3, active: true },
+  { id: "cat_hair_acc", slug: "hair-accessories", name: "Hair Accessories", tagline: "Caps, bonnets, stands & bond", family: "HAIR_ACCESSORY", position: 4, active: true },
+];
+
+/** The wig types, in the order they are shown. Each is a product tag. */
+export const WIG_TYPES: { tag: string; name: string; blurb: string }[] = [
+  { tag: "headband-wigs", name: "Headband wigs", blurb: "No glue, no lace — slip it on and go." },
+  { tag: "closure-wigs", name: "Closure wigs", blurb: "4x4 and 5x5 closures with a natural parting." },
+  { tag: "frontal-wigs", name: "Frontal wigs", blurb: "13x4 and 13x6 HD lace that melts." },
 ];
 
 interface Spec {
@@ -27,41 +39,70 @@ interface Spec {
 }
 
 const SPECS: Spec[] = [
-  /* ------------------------------------------------------------- WIGS */
+  /* ---------------------------------------------------- FRONTAL WIGS */
   {
-    id: "prd_bodywave", categoryId: "cat_wigs", slug: "aria-body-wave-hd-lace",
-    name: "Aria Body Wave HD Lace Wig",
+    id: "prd_bodywave", categoryId: "cat_wigs", slug: "aria-body-wave-hd-frontal",
+    name: "Aria Body Wave HD Frontal Wig",
     summary: "13x4 HD lace frontal, 180% density, bleached knots.",
     description:
-      "Our best-selling unit. Ethically sourced 100% human hair on a melt-free HD lace frontal, pre-plucked with bleached knots so it sits flat from day one. Can be dyed, straightened and reinstalled — with care it holds up for 12+ months.",
-    tags: ["human hair", "hd lace", "bestseller"], featured: true, compareAt: K(14500),
+      "Our best-selling unit. 100% human hair on a melt-free HD lace frontal, pre-plucked with bleached knots so it sits flat from day one. Can be dyed, straightened and reinstalled — with care it holds up for 12+ months.",
+    tags: ["frontal-wigs", "human hair", "hd lace", "bestseller"], featured: true, compareAt: K(18500),
     variants: [
-      [{ Length: '16"', Density: "180%", Colour: "Natural Black" }, K(11500), 6],
-      [{ Length: '18"', Density: "180%", Colour: "Natural Black" }, K(12900), 5],
-      [{ Length: '20"', Density: "180%", Colour: "Natural Black" }, K(14200), 3],
-      [{ Length: '18"', Density: "180%", Colour: "Honey Blonde" }, K(14900), 2],
+      [{ Length: '16"', Density: "180%", Colour: "Natural Black" }, K(14500), 6],
+      [{ Length: '18"', Density: "180%", Colour: "Natural Black" }, K(16200), 5],
+      [{ Length: '20"', Density: "180%", Colour: "Natural Black" }, K(17900), 3],
+      [{ Length: '18"', Density: "180%", Colour: "Honey Blonde" }, K(18400), 2],
     ],
   },
   {
-    id: "prd_bob", categoryId: "cat_wigs", slug: "nia-blunt-cut-bob",
-    name: "Nia Blunt Cut Bob",
+    id: "prd_straight", categoryId: "cat_wigs", slug: "tiana-bone-straight-frontal",
+    name: "Tiana Bone Straight Frontal Wig",
+    summary: "13x6 HD lace, silk-pressed bone straight finish.",
+    description:
+      "A 13x6 frontal with a deep parting space, pressed bone straight and ready to wear out of the box. Holds the press through Nairobi humidity and reverts to its own wave after a wash.",
+    tags: ["frontal-wigs", "human hair", "hd lace"], featured: true,
+    variants: [
+      [{ Length: '18"', Density: "180%", Colour: "Natural Black" }, K(17500), 4],
+      [{ Length: '22"', Density: "200%", Colour: "Natural Black" }, K(21500), 3],
+      [{ Length: '22"', Density: "200%", Colour: "Dark Brown" }, K(22400), 2],
+    ],
+  },
+
+  /* ---------------------------------------------------- CLOSURE WIGS */
+  {
+    id: "prd_bob", categoryId: "cat_wigs", slug: "nia-blunt-cut-closure-bob",
+    name: "Nia Blunt Cut Closure Bob",
     summary: "Glueless 4x4 closure bob — office-ready in five minutes.",
     description:
       "A wear-and-go glueless bob on an adjustable band with built-in combs. Straight blunt cut that frames the jaw, light enough for daily wear in Nairobi heat.",
-    tags: ["glueless", "beginner friendly"], featured: true,
+    tags: ["closure-wigs", "glueless", "beginner friendly"], featured: true,
     variants: [
-      [{ Length: '10"', Density: "150%", Colour: "Natural Black" }, K(7500), 8],
-      [{ Length: '12"', Density: "150%", Colour: "Natural Black" }, K(8200), 7],
-      [{ Length: '12"', Density: "150%", Colour: "Burgundy" }, K(8900), 3],
+      [{ Length: '10"', Density: "150%", Colour: "Natural Black" }, K(8500), 8],
+      [{ Length: '12"', Density: "150%", Colour: "Natural Black" }, K(9400), 7],
+      [{ Length: '12"', Density: "150%", Colour: "Burgundy" }, K(9900), 3],
     ],
   },
   {
-    id: "prd_curly", categoryId: "cat_wigs", slug: "zawadi-kinky-curly-u-part",
-    name: "Zawadi Kinky Curly U-Part",
+    id: "prd_deepwave", categoryId: "cat_wigs", slug: "zuri-deep-wave-closure",
+    name: "Zuri Deep Wave 5x5 Closure Wig",
+    summary: "5x5 HD closure with a defined deep wave.",
+    description:
+      "A full-bodied deep wave on a 5x5 HD closure — enough parting space to switch sides, with none of the frontal upkeep. Curls spring back after a wash with a sulphate-free cleanser.",
+    tags: ["closure-wigs", "human hair"],
+    variants: [
+      [{ Length: '16"', Density: "180%", Colour: "Natural Black" }, K(12500), 5],
+      [{ Length: '20"', Density: "180%", Colour: "Natural Black" }, K(14800), 3],
+    ],
+  },
+
+  /* --------------------------------------------------- HEADBAND WIGS */
+  {
+    id: "prd_curly", categoryId: "cat_wigs", slug: "amara-kinky-curly-headband",
+    name: "Amara Kinky Curly Headband Wig",
     summary: "Blends with 4C leave-out. No glue, no lace.",
     description:
-      "A U-part unit built for natural 4C texture — leave out your edges, clip in, done. Curl pattern springs back after washing with a sulphate-free cleanser.",
-    tags: ["natural texture", "protective style"],
+      "A headband unit built for natural 4C texture — leave out your edges, slip it on, done. Comes with two interchangeable bands, black and satin-print.",
+    tags: ["headband-wigs", "natural texture", "protective style"], featured: true,
     variants: [
       [{ Length: '14"', Density: "150%", Colour: "Natural Black" }, K(6900), 9],
       [{ Length: '16"', Density: "150%", Colour: "Natural Black" }, K(7600), 4],
@@ -69,21 +110,111 @@ const SPECS: Spec[] = [
     ],
   },
   {
-    id: "prd_pixie", categoryId: "cat_wigs", slug: "lulu-pixie-cut",
-    name: "Lulu Pixie Cut",
-    summary: "Featherweight synthetic pixie, heat-safe to 180°C.",
+    id: "prd_waterwave", categoryId: "cat_wigs", slug: "lulu-water-wave-headband",
+    name: "Lulu Water Wave Headband Wig",
+    summary: "Beach-wave unit you can wear straight from the box.",
     description:
-      "Low-maintenance synthetic fibre that holds its shape through the rains. Shake it out and go — ideal as a second unit for travel or the gym.",
-    tags: ["synthetic", "low maintenance", "budget"],
+      "Soft water-wave fibre blended for daily wear and travel. Shake it out, settle the band and go — ideal as a second unit while your install rests.",
+    tags: ["headband-wigs", "low maintenance", "budget"],
     variants: [
-      [{ Length: '6"', Density: "130%", Colour: "Natural Black" }, K(3200), 12],
-      [{ Length: '6"', Density: "130%", Colour: "Ginger" }, K(3400), 6],
+      [{ Length: '14"', Density: "150%", Colour: "Natural Black" }, K(4500), 12],
+      [{ Length: '16"', Density: "150%", Colour: "Ginger" }, K(4900), 6],
     ],
   },
 
-  /* -------------------------------------------------- WIG ACCESSORIES */
+  /* ------------------------------------------------------- EXTENSIONS */
   {
-    id: "prd_wigcap", categoryId: "cat_wig_acc", slug: "stocking-wig-cap-5pack",
+    id: "prd_bundles", categoryId: "cat_extensions", slug: "bello-body-wave-bundles",
+    name: "Bello Body Wave Bundles",
+    summary: "Single-donor wefts, double-stitched, per bundle.",
+    description:
+      "Sold by the bundle so you can build the install you want. Double-stitched wefts that do not shed, from one donor so the texture matches across lengths.",
+    tags: ["bundles", "human hair", "bestseller"], featured: true,
+    variants: [
+      [{ Length: '14"', Texture: "Body Wave", Colour: "Natural Black" }, K(3500), 14],
+      [{ Length: '18"', Texture: "Body Wave", Colour: "Natural Black" }, K(4800), 10],
+      [{ Length: '22"', Texture: "Body Wave", Colour: "Natural Black" }, K(6400), 6],
+    ],
+  },
+  {
+    id: "prd_clipin", categoryId: "cat_extensions", slug: "clip-in-straight-extensions",
+    name: "Clip-In Straight Extensions (7 pieces)",
+    summary: "Seven wefts, 16 clips — in and out in minutes.",
+    description:
+      "A full seven-piece set with silicone-lined clips that grip without pulling. Straight finish that blends with relaxed or pressed hair.",
+    tags: ["clip-ins", "beginner friendly"],
+    variants: [
+      [{ Length: '16"', Texture: "Straight", Colour: "Natural Black" }, K(4200), 9],
+      [{ Length: '20"', Texture: "Straight", Colour: "Natural Black" }, K(5400), 5],
+      [{ Length: '20"', Texture: "Straight", Colour: "Dark Brown" }, K(5600), 3],
+    ],
+  },
+  {
+    id: "prd_ponytail", categoryId: "cat_extensions", slug: "drawstring-ponytail-extension",
+    name: "Drawstring Ponytail Extension",
+    summary: "Sleek ponytail on a drawstring and two combs.",
+    description:
+      "Pull it on over your own bun, tighten the drawstring and wrap the band. The fastest way to a finished look on a work morning.",
+    tags: ["ponytail", "quick style"], featured: true,
+    variants: [
+      [{ Length: '18"', Texture: "Straight", Colour: "Natural Black" }, K(2500), 18],
+      [{ Length: '22"', Texture: "Curly", Colour: "Natural Black" }, K(2900), 11],
+    ],
+  },
+  {
+    id: "prd_bundledeal", categoryId: "cat_extensions", slug: "kinky-curly-bundle-deal",
+    name: "Kinky Curly Bundle Deal (3 + closure)",
+    summary: "Three bundles and a 4x4 closure, priced as a set.",
+    description:
+      "Everything a full sew-in needs in one box: three matched kinky-curly bundles and a 4x4 closure, at less than the four bought apart.",
+    tags: ["bundles", "deal"], compareAt: K(12500),
+    variants: [
+      [{ Length: '16"', Texture: "Kinky Curly", Colour: "Natural Black" }, K(9500), 5],
+      [{ Length: '20"', Texture: "Kinky Curly", Colour: "Natural Black" }, K(11900), 3],
+    ],
+  },
+
+  /* --------------------------------------------------------- HAIRCARE */
+  {
+    id: "prd_shampoo", categoryId: "cat_haircare", slug: "wig-revive-shampoo-conditioner",
+    name: "Wig Revive Shampoo & Conditioner Set",
+    summary: "Sulphate-free pair that keeps a unit soft, not stiff.",
+    description:
+      "A gentle wash built for human-hair units: no sulphates to strip the cuticle, and a conditioner light enough that the hair does not go limp.",
+    tags: ["wash day", "essentials"], featured: true,
+    variants: [
+      [{ Size: "250ml pair" }, K(1850), 20],
+      [{ Size: "500ml pair" }, K(2900), 12],
+    ],
+  },
+  {
+    id: "prd_serum", categoryId: "cat_haircare", slug: "argan-hair-scalp-serum",
+    name: "Argan Hair & Scalp Serum",
+    summary: "Light oil that adds shine without the grease.",
+    description: "Argan and jojoba in a dropper bottle. A few drops through the mid-lengths revives a dull unit; on your own scalp it settles itch under a cap.",
+    tags: ["aftercare"],
+    variants: [[{ Size: "60ml" }, K(950), 30], [{ Size: "120ml" }, K(1600), 16]],
+  },
+  {
+    id: "prd_leavein", categoryId: "cat_haircare", slug: "leave-in-detangling-spray",
+    name: "Leave-In Detangling Spray",
+    summary: "Works the knots out of a curly unit without shedding.",
+    description: "Spray through damp hair and comb from the ends up. Slip enough to detangle kinky and deep-wave textures without pulling the weft.",
+    tags: ["wash day"],
+    variants: [[{ Size: "200ml" }, K(890), 26]],
+  },
+  {
+    id: "prd_edgegel", categoryId: "cat_haircare", slug: "edge-control-gel",
+    name: "Edge Control Gel",
+    summary: "All-day hold with no white flaking.",
+    description: "A firm but non-crunchy hold for laying edges over a headband or under a frontal. Washes out clean with water.",
+    tags: ["styling", "bestseller"],
+    variants: [[{ Size: "60g" }, K(450), 48], [{ Size: "120g" }, K(750), 25]],
+  },
+
+  /* ------------------------------------------------- HAIR ACCESSORIES */
+  {
+    id: "prd_wigcap", categoryId: "cat_hair_acc", slug: "stocking-wig-caps-5pack",
     name: "Stocking Wig Caps (5 pack)",
     summary: "Breathable nylon caps that hold braids flat.",
     description: "Five-pack of stretch caps in two shades. Keeps cornrows compressed so your unit lies flat and the lace blends.",
@@ -94,7 +225,7 @@ const SPECS: Spec[] = [
     ],
   },
   {
-    id: "prd_lacegel", categoryId: "cat_wig_acc", slug: "hold-me-lace-glue",
+    id: "prd_lacegel", categoryId: "cat_hair_acc", slug: "hold-me-lace-bond-kit",
     name: "Hold Me Lace Bond & Melt Kit",
     summary: "Waterproof bond, melt spray and edge brush in one box.",
     description: "Latex-free bond rated for 5–7 days of hold, paired with a melt spray and a dual-ended edge brush. Humidity-tested for the coast.",
@@ -105,119 +236,31 @@ const SPECS: Spec[] = [
     ],
   },
   {
-    id: "prd_wigstand", categoryId: "cat_wig_acc", slug: "collapsible-wig-stand",
+    id: "prd_wigstand", categoryId: "cat_hair_acc", slug: "collapsible-wig-stand",
     name: "Collapsible Wig Stand",
     summary: "Folds flat — keeps units in shape between wears.",
     description: "Lightweight tripod stand with a vented mannequin head. Folds into a travel pouch.",
     tags: ["storage"],
-    variants: [[{ Type: "Tripod + head" }, K(1600), 14]],
+    variants: [[{ Size: "Tripod + head" }, K(1600), 14]],
   },
-
-  /* ----------------------------------------------------------- LASHES */
   {
-    id: "prd_mink", categoryId: "cat_lashes", slug: "siri-3d-mink-lashes",
-    name: "Siri 3D Mink Lashes",
-    summary: "Feather-light band, up to 20 wears.",
-    description: "Hand-tied 3D faux mink on a cotton band that curves to the lash line. Reusable up to 20 times with gentle cleaning.",
-    tags: ["mink", "reusable", "bestseller"], featured: true,
+    id: "prd_bonnet", categoryId: "cat_hair_acc", slug: "satin-bonnet-scrunchie-set",
+    name: "Satin Bonnet & Scrunchie Set",
+    summary: "Sleep in it — your unit lasts twice as long.",
+    description: "A double-lined satin bonnet with a soft elastic that does not mark your forehead, plus two matching scrunchies.",
+    tags: ["aftercare", "sleep"],
     variants: [
-      [{ Style: "Natural", Length: "12mm" }, K(650), 45],
-      [{ Style: "Volume", Length: "16mm" }, K(750), 38],
-      [{ Style: "Dramatic", Length: "20mm" }, K(850), 20],
+      [{ Shade: "Blush Pink" }, K(750), 30],
+      [{ Shade: "Midnight Navy" }, K(750), 18],
     ],
   },
   {
-    id: "prd_magnetic", categoryId: "cat_lashes", slug: "magnetic-lash-set",
-    name: "Magnetic Lash & Liner Set",
-    summary: "No glue — five magnets per band.",
-    description: "Two pairs plus a magnetic liner pen. Reposition as many times as you like, no drying time.",
-    tags: ["magnetic", "glue free"],
-    variants: [
-      [{ Style: "Everyday duo" }, K(2200), 16],
-      [{ Style: "Glam duo" }, K(2450), 9],
-    ],
-  },
-  {
-    id: "prd_cluster", categoryId: "cat_lashes", slug: "diy-cluster-lash-kit",
-    name: "DIY Cluster Lash Kit",
-    summary: "60 clusters, bond & seal — salon look at home.",
-    description: "Segment clusters in mixed lengths with a 72-hour bond and sealant. Comes with a step card for first-timers.",
-    tags: ["diy", "kit"],
-    variants: [[{ Mix: "9–14mm" }, K(1950), 18], [{ Mix: "12–18mm" }, K(2100), 12]],
-  },
-
-  /* --------------------------------------------- LASH ACCESSORIES ---- */
-  {
-    id: "prd_lashglue", categoryId: "cat_lash_acc", slug: "clear-lash-adhesive",
-    name: "Clear Lash Adhesive",
-    summary: "Latex-free, dries clear in 10 seconds.",
-    description: "Sensitive-eye formula that dries invisible and holds through a full day.",
-    tags: ["essentials"],
-    variants: [[{ Size: "5ml" }, K(380), 60], [{ Size: "10ml" }, K(620), 30]],
-  },
-  {
-    id: "prd_applicator", categoryId: "cat_lash_acc", slug: "precision-lash-applicator",
-    name: "Precision Lash Applicator",
-    summary: "Curved steel tweezers with a non-slip grip.",
-    description: "Angled tip that grips the band without crushing it. Comes with a cap.",
+    id: "prd_edgebrush", categoryId: "cat_hair_acc", slug: "edge-brush-band-set",
+    name: "Edge Brush & Elastic Band Set",
+    summary: "Dual-ended brush with two melting bands.",
+    description: "A boar-bristle edge brush with a rat-tail end for parting, and two elastic bands for melting the lace down while the bond sets.",
     tags: ["tools"],
-    variants: [[{ Finish: "Rose gold" }, K(550), 34], [{ Finish: "Matte black" }, K(550), 28]],
-  },
-  {
-    id: "prd_lashcleanser", categoryId: "cat_lash_acc", slug: "lash-cleanser-foam",
-    name: "Lash Cleanser Foam",
-    summary: "Oil-free foam that extends band life.",
-    description: "Removes residue and mascara without dissolving the bond. Safe over extensions.",
-    tags: ["aftercare"],
-    variants: [[{ Size: "60ml" }, K(890), 25]],
-  },
-
-  /* --------------------------------------------------------- HANDBAGS */
-  {
-    id: "prd_tote", categoryId: "cat_bags", slug: "sauti-structured-tote",
-    name: "Sauti Structured Tote",
-    summary: "Fits a 14\" laptop, holds its shape.",
-    description: "A structured work tote in vegan leather with a laptop sleeve, two slip pockets and a detachable crossbody strap.",
-    tags: ["work", "bestseller"], featured: true,
-    variants: [
-      [{ Colour: "Black" }, K(5200), 7],
-      [{ Colour: "Tan" }, K(5200), 5],
-      [{ Colour: "Plum" }, K(5400), 3],
-    ],
-  },
-  {
-    id: "prd_shoulder", categoryId: "cat_bags", slug: "dala-shoulder-bag",
-    name: "Dala Shoulder Bag",
-    summary: "Slouchy underarm bag with a zip top.",
-    description: "Soft-body shoulder bag with a single strap that tucks under the arm. Lined, with an inner zip pocket.",
-    tags: ["everyday"],
-    variants: [
-      [{ Colour: "Chocolate" }, K(3900), 6],
-      [{ Colour: "Cream" }, K(3900), 4],
-    ],
-  },
-  {
-    id: "prd_clutch", categoryId: "cat_bags", slug: "noir-evening-clutch",
-    name: "Noir Evening Clutch",
-    summary: "Hard-shell clutch with a drop-in chain.",
-    description: "Compact evening clutch with a satin lining and a chain that tucks inside to convert to a hand-held.",
-    tags: ["evening", "occasion"],
-    variants: [
-      [{ Colour: "Black" }, K(2800), 8],
-      [{ Colour: "Silver" }, K(3000), 4],
-    ],
-  },
-  {
-    id: "prd_crossbody", categoryId: "cat_bags", slug: "safari-mini-crossbody",
-    name: "Safari Mini Crossbody",
-    summary: "Phone, cards, lip balm. Nothing more.",
-    description: "Minimal crossbody sized for the essentials, with an adjustable webbing strap.",
-    tags: ["mini"],
-    variants: [
-      [{ Colour: "Olive" }, K(2200), 9],
-      [{ Colour: "Black" }, K(2200), 11],
-      [{ Colour: "Violet" }, K(2300), 5],
-    ],
+    variants: [[{ Size: "Brush + 2 bands" }, K(550), 34]],
   },
 ];
 

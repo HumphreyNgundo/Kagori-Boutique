@@ -22,17 +22,17 @@ export interface PersistenceDriver {
  * per route, so a plain module variable gives each route its own empty copy and
  * freshly placed orders disappear on the next page.
  */
-const store = globalThis as typeof globalThis & { __kagorimMemory?: { db: Database | null } };
-store.__kagorimMemory ??= { db: null };
+const store = globalThis as typeof globalThis & { __belloMemory?: { db: Database | null } };
+store.__belloMemory ??= { db: null };
 
 export const memoryDriver: PersistenceDriver = {
   name: "in-memory",
   durable: false,
   async load() {
-    return store.__kagorimMemory!.db;
+    return store.__belloMemory!.db;
   },
   async save(db) {
-    store.__kagorimMemory!.db = db;
+    store.__belloMemory!.db = db;
   },
 };
 
@@ -42,7 +42,7 @@ export const memoryDriver: PersistenceDriver = {
 /* concurrent writes or reporting queries outgrow it.                   */
 /* ------------------------------------------------------------------ */
 
-const BLOB_KEY = "kagorim/state.json";
+const BLOB_KEY = "bello-beauty/state.json";
 
 /**
  * The blob is read by its deterministic public URL rather than by `list()`.

@@ -6,27 +6,32 @@ Photography is replaced from the admin console (Products → a product → Choos
 product photos), which stores the upload in Vercel Blob and overwrites the URL
 on the record.
 
-The demo URLs point at [Unsplash](https://unsplash.com), used under the
-[Unsplash License](https://unsplash.com/license), which permits commercial use
-without attribution. The crop (square, WebP, 1100px) is applied by Unsplash's
-own image pipeline, so there is nothing to process at build time.
+The demo URLs point at [Pexels](https://pexels.com) and
+[Unsplash](https://unsplash.com), used under the
+[Pexels License](https://www.pexels.com/license/) and the
+[Unsplash License](https://unsplash.com/license), both of which permit
+commercial use without attribution. The crop (square, 1100px) is applied by
+their own image pipelines, so there is nothing to process at build time.
 
-Every one of the 28 products carries a photograph, as do the nine category
-shelves and the landing page. The full mapping lives in
-`src/lib/seed/photos.ts` — each entry is an Unsplash photo id, so the file is
-the credit list.
+Every one of the 19 products carries a photograph, as do the four category
+shelves and the three wig types. The full mapping lives in
+`src/lib/seed/photos.ts` — each entry is a Pexels or Unsplash photo id, so the
+file is the credit list.
 
 Every photo was downloaded and inspected before being listed. Several
 candidates that looked right as thumbnails turned out to be a different product
-entirely and were dropped. Brand logos are visible on some of the footwear and
-cosmetics, which is fine for a demo but would need replacing before selling.
+entirely and were dropped. Brand logos are visible on some of the haircare
+bottles, which is fine for a demo but would need replacing before selling.
 
-**These are stock photographs of similar items, not Kagorim's own stock**, so
-some are approximations: the wigs are modelled hair rather than units on a
-mannequin head, and a few shoes match the category better than the exact
-silhouette. Replace them with real product photography from the console before
-selling — generated artwork still covers anything without a photo, so a new
-product never renders as a hole.
+**These are stock photographs of similar items, not Bello Beauty's own stock**,
+so some are approximations: a few units are modelled hair rather than the exact
+cut on a mannequin head. Replace them with real product photography from the
+console before selling — generated artwork still covers anything without a
+photo, so a new product never renders as a hole.
+
+The one exception is the brand's own imagery, which is committed to
+`public/brand`: the logo (heart mark and circular badge) and the packaging
+photograph used as the landing page lead. Those are Bello Beauty's own.
 
 ## How a photo reaches a product
 

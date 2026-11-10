@@ -14,10 +14,10 @@ import { CATEGORIES, buildCatalog } from "@/lib/seed/catalog";
 import { buildUsers } from "@/lib/seed/users";
 
 export const ZONES: DeliveryZone[] = [
-  { id: "zone_pickup", name: "Pickup — Kagorim Shop, Nairobi CBD", fee: 0, etaHours: 4, method: "PICKUP", active: true },
-  { id: "zone_cbd", name: "Nairobi CBD & Westlands", fee: 20000, etaHours: 6, method: "DELIVERY", active: true },
-  { id: "zone_nairobi", name: "Greater Nairobi (Kasarani, Rongai, Ruiru…)", fee: 30000, etaHours: 24, method: "DELIVERY", active: true },
-  { id: "zone_upcountry", name: "Upcountry courier (Mombasa, Kisumu, Eldoret…)", fee: 45000, etaHours: 72, method: "DELIVERY", active: true },
+  { id: "zone_pickup", name: "Pickup — Mithoo Business Centre, Moi Avenue", fee: 0, etaHours: 2, method: "PICKUP", active: true },
+  { id: "zone_cbd", name: "Nairobi CBD & Westlands — same day", fee: 20000, etaHours: 4, method: "DELIVERY", active: true },
+  { id: "zone_nairobi", name: "Greater Nairobi (Kasarani, Rongai, Ruiru…) — same day", fee: 30000, etaHours: 8, method: "DELIVERY", active: true },
+  { id: "zone_upcountry", name: "Outside Nairobi, by courier (Mombasa, Kisumu, Eldoret…)", fee: 45000, etaHours: 48, method: "DELIVERY", active: true },
 ];
 
 export const COUPONS: Coupon[] = [
@@ -26,13 +26,13 @@ export const COUPONS: Coupon[] = [
 ];
 
 export const SETTINGS: StoreSettings = {
-  storeName: "Kagorim Enterprise",
-  tagline: "Wigs, lashes and handbags, picked for Nairobi and delivered countrywide.",
-  address: "Kagorim Enterprise, Taveta Road, Nairobi CBD",
-  hours: "Mon–Sat 9am–7pm · Sun by appointment",
+  storeName: "Bello Beauty",
+  tagline: "Handpicked wigs, extensions and haircare — same day delivery within Nairobi.",
+  address: "Mithoo Business Centre, Moi Avenue, 1st floor, F25, Nairobi",
+  hours: "Mon–Sat 9am–8pm · Sunday by appointment",
   currency: "KES",
-  whatsapp: "254712000000",
-  supportPhone: "0712 000 000",
+  whatsapp: "254798840894",
+  supportPhone: "0798 840 894",
   freeDeliveryOver: 1000000, // free delivery over KES 10,000
   mpesaEnabled: true,
   cardEnabled: true,
@@ -117,7 +117,7 @@ const PIPELINES: Pipeline[] = [
       ["PENDING_PAYMENT", "Order placed via self-checkout."],
       ["CONFIRMED", "Payment confirmed."],
       ["PACKED", "Packed for collection."],
-      ["READY_FOR_PICKUP", "Ready at the CBD shop."],
+      ["READY_FOR_PICKUP", "Ready at the Moi Avenue shop."],
     ],
   },
   {
@@ -128,15 +128,15 @@ const PIPELINES: Pipeline[] = [
     status: "CANCELLED", paid: false,
     steps: [
       ["PENDING_PAYMENT", "Order placed via self-checkout."],
-      ["CANCELLED", "Customer cancelled — wrong size ordered."],
+      ["CANCELLED", "Customer cancelled — wrong length ordered."],
     ],
   },
 ];
 
 const CODES = [
-  "KGB-7F3Q2A", "KGB-M4R8TK", "KGB-P9XD2V", "KGB-H6CN4L", "KGB-T2WY8B",
-  "KGB-Z5KQ7M", "KGB-B8VJ3R", "KGB-Q4LT6N", "KGB-D7SH9P", "KGB-F3GM5W",
-  "KGB-X9BR4C", "KGB-K6ND2T", "KGB-V2PQ8H", "KGB-N5TJ7Z",
+  "BB-7F3Q2A", "BB-M4R8TK", "BB-P9XD2V", "BB-H6CN4L", "BB-T2WY8B",
+  "BB-Z5KQ7M", "BB-B8VJ3R", "BB-Q4LT6N", "BB-D7SH9P", "BB-F3GM5W",
+  "BB-X9BR4C", "BB-K6ND2T", "BB-V2PQ8H", "BB-N5TJ7Z",
 ];
 
 function buildHistory(variants: Variant[], now: number) {
@@ -245,7 +245,7 @@ function buildHistory(variants: Variant[], now: number) {
  * store carrying a different version is replaced on the next boot, so a
  * redeploy can never serve data from an older seed.
  */
-export const SEED_VERSION = 2;
+export const SEED_VERSION = 3;
 
 export function buildDatabase(now = Date.now()): Database {
   const { products, variants } = buildCatalog();
@@ -288,7 +288,7 @@ export function buildDatabase(now = Date.now()): Database {
         actorName: "System",
         action: "store.seeded",
         entity: "store",
-        entityId: "kagorim",
+        entityId: "bello-beauty",
         meta: { products: products.length, orders: history.orders.length },
         createdAt: new Date(now).toISOString(),
       },

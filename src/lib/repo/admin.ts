@@ -412,11 +412,9 @@ export async function listProductsForAdmin() {
 /** Option axes offered when a new product is created, per category family. */
 export const FAMILY_AXES: Record<ProductFamily, string[]> = {
   WIG: ["Length", "Density", "Colour"],
-  WIG_ACCESSORY: ["Size"],
-  LASH: ["Style", "Length"],
-  LASH_ACCESSORY: ["Size"],
-  FOOTWEAR: ["Size", "Colour"],
-  BAG: ["Colour"],
+  EXTENSION: ["Length", "Texture", "Colour"],
+  HAIRCARE: ["Size"],
+  HAIR_ACCESSORY: ["Size"],
 };
 
 function slugify(value: string): string {

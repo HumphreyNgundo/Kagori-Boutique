@@ -46,6 +46,8 @@ export async function getCategory(slug: string): Promise<Category | null> {
 
 export interface CatalogQuery {
   categorySlug?: string;
+  /** A product tag, e.g. "frontal-wigs" — how a shelf is cut into types. */
+  tag?: string;
   q?: string;
   sort?: "featured" | "price-asc" | "price-desc" | "newest";
   inStockOnly?: boolean;
@@ -69,6 +71,7 @@ export async function listProducts(query: CatalogQuery = {}): Promise<ProductCar
     .filter((c) => c.category?.active);
 
   if (query.categorySlug) cards = cards.filter((c) => c.category.slug === query.categorySlug);
+  if (query.tag) cards = cards.filter((c) => c.product.tags.includes(query.tag!));
 
   if (query.q) {
     const needle = query.q.toLowerCase().trim();

@@ -7,11 +7,11 @@ import { verifyPassword } from "@/lib/auth/password";
 import { can, type Permission } from "@/lib/auth/rbac";
 import type { Role } from "@/lib/types";
 
-const COOKIE = "kagorim_session";
+const COOKIE = "bello_session";
 const MAX_AGE = 60 * 60 * 8; // a trading day
 
 /** Dev fallback keeps preview deployments working; set AUTH_SECRET in prod. */
-const SECRET = process.env.AUTH_SECRET || "kagorim-dev-secret-change-me";
+const SECRET = process.env.AUTH_SECRET || "bello-dev-secret-change-me";
 
 export interface SessionUser {
   id: string;

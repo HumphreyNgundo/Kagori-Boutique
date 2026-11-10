@@ -22,8 +22,8 @@ interface Cache {
 }
 
 // Hangs off globalThis so Next.js dev hot-reloads don't reset the store.
-const g = globalThis as typeof globalThis & { __kagorim?: Cache };
-const cache: Cache = (g.__kagorim ??= { db: null, at: 0, inflight: null });
+const g = globalThis as typeof globalThis & { __bello?: Cache };
+const cache: Cache = (g.__bello ??= { db: null, at: 0, inflight: null });
 
 export const driver: PersistenceDriver = selectDriver();
 

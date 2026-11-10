@@ -1,5 +1,5 @@
 -- =====================================================================
--- Kagorim Boutique — canonical relational schema (PostgreSQL 15+)
+-- Bello Beauty — canonical relational schema (PostgreSQL 15+)
 --
 -- The running demo persists this same shape through a document driver
 -- (Vercel Blob / in-memory). This file is the production target: run it
@@ -36,7 +36,7 @@ CREATE TABLE user_permission_overrides (
 
 -- ------------------------------------------------------------- CATALOG
 CREATE TYPE product_family AS ENUM
-  ('WIG','WIG_ACCESSORY','LASH','LASH_ACCESSORY','FOOTWEAR','BAG');
+  ('WIG','EXTENSION','HAIRCARE','HAIR_ACCESSORY');
 
 CREATE TABLE categories (
   id       UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -66,7 +66,7 @@ CREATE TABLE products (
 CREATE INDEX products_category_idx ON products(category_id) WHERE active;
 
 -- Variant option axes vary by family (wig: length/density/colour,
--- footwear: size/colour, bag: colour) so they live in JSONB rather than
+-- extension: length/texture/colour, haircare: size) so they live in JSONB rather than
 -- as rigid columns.
 CREATE TABLE variants (
   id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -121,7 +121,7 @@ CREATE TABLE coupons (
 
 CREATE TABLE orders (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  code           TEXT UNIQUE NOT NULL,                     -- KGB-7F3Q2A
+  code           TEXT UNIQUE NOT NULL,                     -- BB-7F3Q2A
   customer_id    UUID NOT NULL REFERENCES customers(id) ON DELETE RESTRICT,
   status         order_status NOT NULL DEFAULT 'PENDING_PAYMENT',
   fulfilment     fulfilment_method NOT NULL,

@@ -8,7 +8,7 @@ import { can, ROLE_LABELS, type Permission } from "@/lib/auth/rbac";
 import { logoutAction } from "@/lib/actions/auth";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: { default: "Console", template: "%s · Kagorim Console" } };
+export const metadata = { title: { default: "Console", template: "%s · Bello Beauty Console" } };
 
 /** Each entry declares the permission that reveals it — the nav is the RBAC model. */
 const NAV: (NavItem & { permission: Permission })[] = [
@@ -34,9 +34,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-[1600px] items-center gap-3 px-4 sm:px-6">
           <Link href="/admin" className="flex items-center gap-2.5">
-            <LogoMark size={26} className="text-ink" />
+            <LogoMark size={26} />
             <span className="flex flex-col leading-none">
-              <span className="text-sm font-extrabold tracking-tight">KAGORIM</span>
+              <span className="text-sm font-extrabold tracking-tight">BELLO BEAUTY</span>
               <span className="text-[0.5rem] font-semibold text-subtle" style={{ letterSpacing: "0.3em" }}>
                 CONSOLE
               </span>

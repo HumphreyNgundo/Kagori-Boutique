@@ -2,56 +2,52 @@
  * Product and category photography, addressed by URL so it lives in the
  * product record rather than in the repository.
  *
- * Each entry is an Unsplash CDN URL with the crop applied by their image
- * pipeline, so no binaries are committed and nothing is processed at build
- * time. Staff uploads (Vercel Blob) overwrite these the moment a real photo is
- * added from the console. Sources are listed in docs/PHOTO-CREDITS.md.
+ * Each entry is a Pexels or Unsplash CDN URL with the crop applied by their
+ * image pipeline, so no binaries are committed and nothing is processed at
+ * build time. Staff uploads (Vercel Blob) overwrite these the moment a real
+ * photo is added from the console. Sources are listed in
+ * docs/PHOTO-CREDITS.md.
  */
 
 const SQUARE = "w=1100&h=1100&fit=crop&crop=entropy&fm=webp&q=82";
-const WIDE = "w=1400&h=1000&fit=crop&crop=entropy&fm=webp&q=82";
 
 const square = (id: string) => `https://images.unsplash.com/${id}?${SQUARE}`;
 
 /** Pexels applies its own crop; the id is the number in the photo's URL. */
 const pexels = (id: number) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1100&h=1100&fit=crop`;
-const wide = (id: string) => `https://images.unsplash.com/${id}?${WIDE}`;
 
 export const PRODUCT_PHOTOS: Record<string, string[]> = {
-  /* Wigs */
-  "aria-body-wave-hd-lace": [square("photo-1522337360788-8b13dee7a37e")],
-  "nia-blunt-cut-bob": [pexels(17320165)],
-  "zawadi-kinky-curly-u-part": [square("photo-1519699047748-de8e457a634e")],
-  "lulu-pixie-cut": [square("photo-1492106087820-71f1a00d2b11")],
+  /* Frontal wigs */
+  "aria-body-wave-hd-frontal": [square("photo-1522337360788-8b13dee7a37e")],
+  "tiana-bone-straight-frontal": [pexels(18348405)],
 
-  /* Wig accessories */
-  "stocking-wig-cap-5pack": [square("photo-1522337094846-8a818192de1f")],
-  "hold-me-lace-glue": [square("photo-1620331311520-246422fd82f9")],
-  "collapsible-wig-stand": [square("photo-1527799820374-dcf8d9d4a388")],
+  /* Closure wigs */
+  "nia-blunt-cut-closure-bob": [pexels(17320163)],
+  "zuri-deep-wave-closure": [pexels(4724468)],
 
-  /* Lashes */
-  "siri-3d-mink-lashes": [square("photo-1487412947147-5cebf100ffc2")],
-  "magnetic-lash-set": [square("photo-1596462502278-27bfdc403348")],
-  "diy-cluster-lash-kit": [square("photo-1512496015851-a90fb38ba796")],
+  /* Headband wigs */
+  "amara-kinky-curly-headband": [square("photo-1519699047748-de8e457a634e")],
+  "lulu-water-wave-headband": [pexels(14730872)],
 
-  /* Lash accessories */
-  "clear-lash-adhesive": [square("photo-1571781926291-c477ebfd024b")],
-  "precision-lash-applicator": [square("photo-1516975080664-ed2fc6a32937")],
-  "lash-cleanser-foam": [square("photo-1600857544200-b2f666a9a2ec")],
+  /* Extensions */
+  "bello-body-wave-bundles": [pexels(14730868)],
+  "clip-in-straight-extensions": [pexels(14730876)],
+  "drawstring-ponytail-extension": [pexels(14730877)],
+  "kinky-curly-bundle-deal": [pexels(15868320)],
 
+  /* Haircare */
+  "wig-revive-shampoo-conditioner": [pexels(7428102)],
+  "argan-hair-scalp-serum": [pexels(28994388)],
+  "leave-in-detangling-spray": [pexels(7428103)],
+  "edge-control-gel": [pexels(7428098)],
 
-
-
-
-  /* Handbags */
-  "sauti-structured-tote": [
-    square("photo-1584917865442-de89df76afd3"),
-    square("photo-1591561954557-26941169b49e"),
-  ],
-  "dala-shoulder-bag": [square("photo-1590874103328-eac38a683ce7")],
-  "noir-evening-clutch": [square("photo-1566150905458-1bf1fc113f0d")],
-  "safari-mini-crossbody": [square("photo-1594223274512-ad4803739b7c")],
+  /* Hair accessories */
+  "stocking-wig-caps-5pack": [pexels(14730864)],
+  "hold-me-lace-bond-kit": [pexels(7428099)],
+  "collapsible-wig-stand": [pexels(6923259)],
+  "satin-bonnet-scrunchie-set": [pexels(7897135)],
+  "edge-brush-band-set": [square("photo-1527799820374-dcf8d9d4a388")],
 };
 
 /**
@@ -59,15 +55,24 @@ export const PRODUCT_PHOTOS: Record<string, string[]> = {
  * than editable records, so these stay in code.
  */
 export const CATEGORY_PHOTOS: Record<string, string> = {
-  wigs: square("photo-1554519515-242161756769"),
-  "wig-accessories": square("photo-1527799820374-dcf8d9d4a388"),
-  lashes: square("photo-1487412947147-5cebf100ffc2"),
-  "lash-accessories": square("photo-1596462502278-27bfdc403348"),
-  handbags: square("photo-1591561954557-26941169b49e"),
+  wigs: pexels(13439624),
+  extensions: pexels(14730867),
+  haircare: pexels(8467970),
+  "hair-accessories": pexels(7897135),
 };
 
-/** Landing page lead image. */
-export const HERO_PHOTO = wide("photo-1534452203293-494d7ddbf7e0");
+/**
+ * The three ways we cut a wig. These are tags on the product rather than
+ * categories of their own — the shelves stay four, the way the tabs read.
+ */
+export const WIG_TYPE_PHOTOS: Record<string, string> = {
+  "headband-wigs": pexels(17533400),
+  "closure-wigs": pexels(17320165),
+  "frontal-wigs": pexels(36288157),
+};
+
+/** Landing page lead image — the shop's own packaging. */
+export const HERO_PHOTO = "/brand/hero-bags.webp";
 
 export function photosFor(slug: string): string[] {
   return PRODUCT_PHOTOS[slug] ?? [];

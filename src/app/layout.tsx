@@ -11,14 +11,14 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Kagorim Enterprise — wigs, lashes & handbags in Nairobi",
-    template: "%s · Kagorim Enterprise",
+    default: "Bello Beauty — wigs, extensions & haircare in Nairobi",
+    template: "%s · Bello Beauty",
   },
   description:
-    "Kagorim Enterprise — shop the collection, pay with M-Pesa, and track your order to your door anywhere in Kenya.",
+    "Bello Beauty — handpicked wigs, extensions and haircare. Order online, pay with M-Pesa, and get same day delivery within Nairobi.",
   openGraph: {
-    title: "Kagorim Enterprise",
-    description: "Shop the collection and track every order to your door.",
+    title: "Bello Beauty",
+    description: "Handpicked wigs, extensions and haircare, delivered the same day in Nairobi.",
     type: "website",
   },
 };
@@ -26,12 +26,12 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#08080c" },
+    { media: "(prefers-color-scheme: dark)", color: "#120910" },
   ],
 };
 
 /** Applied before first paint so the theme never flashes. */
-const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('kagorim-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`;
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('bello-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

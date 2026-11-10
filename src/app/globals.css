@@ -4,62 +4,63 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ------------------------------------------------------------------ *
- * Brand tokens, lifted straight from the Kagorim mark:
- *   violet petal  #8A0FF0   cyan petal #35B7F0
- *   lavender petal #EFE4FD  ink drop   #0B0B0F
+ * Brand tokens, lifted from the Bello Beauty mark and packaging:
+ *   hot pink  #D81B74   rose #F178A8
+ *   blush     #FDE8F1   ink  #1B0E15
+ * The shop reads white first, pink second — pink carries the actions.
  * ------------------------------------------------------------------ */
 :root {
-  --brand-violet: #8a0ff0;
-  --brand-cyan: #35b7f0;
-  --brand-lavender: #efe4fd;
-  --brand-ink: #0b0b0f;
+  --brand-pink: #d81b74;
+  --brand-rose: #f178a8;
+  --brand-blush: #fde8f1;
+  --brand-ink: #1b0e15;
 
   --bg: #ffffff;
-  --surface: #fbfaff;
-  --surface-2: #f4f2fb;
+  --surface: #fff7fa;
+  --surface-2: #fdedf3;
   --card: #ffffff;
-  --ink: #0b0b0f;
-  --ink-muted: #63636f;
-  --ink-subtle: #8b8b99;
-  --line: #e9e7f2;
-  --line-strong: #d9d6e8;
-  --brand: #7a0ce0;
-  --brand-soft: #f3e9ff;
+  --ink: #1b0e15;
+  --ink-muted: #6b5560;
+  --ink-subtle: #9a8089;
+  --line: #f4dde6;
+  --line-strong: #e9c6d5;
+  --brand: #d81b74;
+  --brand-soft: #fde8f1;
   --brand-contrast: #ffffff;
-  --accent: #1a9fdd;
-  --accent-soft: #e4f4fd;
+  --accent: #f178a8;
+  --accent-soft: #fdeef4;
   --positive: #0f8a5f;
   --positive-soft: #e3f7ef;
   --warning: #a9700a;
   --warning-soft: #fdf2dd;
-  --danger: #c22c48;
-  --danger-soft: #fdeaee;
-  --shadow-sm: 0 1px 2px rgb(11 11 15 / 0.05);
-  --shadow-md: 0 6px 24px -12px rgb(11 11 15 / 0.18);
-  --shadow-lg: 0 24px 60px -28px rgb(60 10 110 / 0.35);
+  --danger: #cf2016;
+  --danger-soft: #fdeae8;
+  --shadow-sm: 0 1px 2px rgb(27 14 21 / 0.05);
+  --shadow-md: 0 6px 24px -12px rgb(27 14 21 / 0.18);
+  --shadow-lg: 0 24px 60px -28px rgb(170 20 95 / 0.32);
 }
 
 :root[data-theme="dark"] {
-  --bg: #08080c;
-  --surface: #0e0e15;
-  --surface-2: #15151f;
-  --card: #101019;
-  --ink: #f5f4f9;
-  --ink-muted: #a3a2b4;
-  --ink-subtle: #76758a;
-  --line: #22222f;
-  --line-strong: #2e2e40;
-  --brand: #b472ff;
-  --brand-soft: #231436;
-  --brand-contrast: #10031e;
-  --accent: #5cc8f5;
-  --accent-soft: #0d2733;
+  --bg: #120910;
+  --surface: #1a0e16;
+  --surface-2: #23131d;
+  --card: #1c1019;
+  --ink: #fbf2f6;
+  --ink-muted: #c3a9b6;
+  --ink-subtle: #937e8a;
+  --line: #2e1b26;
+  --line-strong: #3d2532;
+  --brand: #ff7fb6;
+  --brand-soft: #3a1328;
+  --brand-contrast: #2a0617;
+  --accent: #ffa8c9;
+  --accent-soft: #3a1c2a;
   --positive: #3ddba0;
   --positive-soft: #0c2a20;
   --warning: #f0b650;
   --warning-soft: #2e2311;
-  --danger: #ff7991;
-  --danger-soft: #341520;
+  --danger: #ff8a80;
+  --danger-soft: #39151a;
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
   --shadow-md: 0 8px 28px -14px rgb(0 0 0 / 0.7);
   --shadow-lg: 0 30px 70px -30px rgb(0 0 0 / 0.85);
@@ -249,12 +250,12 @@ body {
     opacity: 0.5;
   }
   .aurora::before {
-    background: radial-gradient(circle, var(--brand-violet) 0%, transparent 65%);
+    background: radial-gradient(circle, var(--brand-rose) 0%, transparent 65%);
     top: -22rem;
     right: -14rem;
   }
   .aurora::after {
-    background: radial-gradient(circle, var(--brand-cyan) 0%, transparent 65%);
+    background: radial-gradient(circle, var(--brand-pink) 0%, transparent 65%);
     bottom: -26rem;
     left: -16rem;
     opacity: 0.35;

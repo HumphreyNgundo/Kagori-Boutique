@@ -184,7 +184,7 @@ export async function saveSettingsAction(_prev: ActionState, formData: FormData)
   const freeOver = Number(formData.get("freeDeliveryOver") ?? 0);
   await saveSettings(
     {
-      storeName: String(formData.get("storeName") ?? "").trim() || "Kagorim Enterprise",
+      storeName: String(formData.get("storeName") ?? "").trim() || "Bello Beauty",
       tagline: String(formData.get("tagline") ?? "").trim(),
       address: String(formData.get("address") ?? "").trim(),
       hours: String(formData.get("hours") ?? "").trim(),

@@ -33,7 +33,7 @@ export default async function TrackPage({
         </span>
         <h1 className="mt-5 text-3xl font-extrabold tracking-tight sm:text-4xl">Track your order</h1>
         <p className="mx-auto mt-3 max-w-md text-sm text-muted">
-          Enter the code from your confirmation — it looks like <strong className="text-ink">KGB-7F3Q2A</strong>.
+          Enter the code from your confirmation — it looks like <strong className="text-ink">BB-7F3Q2A</strong>.
           No login, no password.
         </p>
       </div>
@@ -42,7 +42,7 @@ export default async function TrackPage({
         <input
           name="code"
           required
-          placeholder="KGB-XXXXXX"
+          placeholder="BB-XXXXXX"
           aria-label="Tracking code"
           className="input text-center font-semibold uppercase tracking-widest"
         />

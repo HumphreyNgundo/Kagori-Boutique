@@ -1,5 +1,5 @@
 /**
- * Kagorim Boutique — canonical domain model.
+ * Bello Beauty — canonical domain model.
  * Mirrors db/schema.sql one-to-one so the persistence driver can be swapped
  * (in-memory / Vercel Blob today, Postgres tomorrow) without touching callers.
  */
@@ -27,7 +27,7 @@ export interface User {
 /* ------------------------------------------------------------------ */
 
 /** Attribute families drive which variant options a product exposes. */
-export type ProductFamily = "WIG" | "WIG_ACCESSORY" | "LASH" | "LASH_ACCESSORY" | "FOOTWEAR" | "BAG";
+export type ProductFamily = "WIG" | "EXTENSION" | "HAIRCARE" | "HAIR_ACCESSORY";
 
 export interface Category {
   id: string;
@@ -58,12 +58,12 @@ export interface Product {
   createdAt: string;
 }
 
-/** Option axes differ per family: wigs use length/colour, shoes use size/colour. */
+/** Option axes differ per family: wigs use length/density/colour, haircare uses size. */
 export interface Variant {
   id: string;
   productId: string;
   sku: string;
-  /** e.g. { size: "38", colour: "Nude" } or { length: '18"', density: "150%" } */
+  /** e.g. { Length: '18"', Density: "180%" } or { Size: "250ml pair" } */
   options: Record<string, string>;
   price: number;
   stock: number;
@@ -127,7 +127,7 @@ export interface OrderEvent {
 
 export interface Order {
   id: string;
-  /** Human-facing tracking code, e.g. KGB-7F3Q2A. */
+  /** Human-facing tracking code, e.g. BB-7F3Q2A. */
   code: string;
   customerId: string;
   status: OrderStatus;

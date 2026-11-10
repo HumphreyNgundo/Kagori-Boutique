@@ -24,7 +24,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     const next: Theme = theme === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     try {
-      localStorage.setItem("kagorim-theme", next);
+      localStorage.setItem("bello-theme", next);
     } catch {
       /* private mode — the choice just won't persist */
     }

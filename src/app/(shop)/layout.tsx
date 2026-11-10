@@ -1,3 +1,4 @@
+import { AnnouncementBar } from "@/components/shop/AnnouncementBar";
 import { Header } from "@/components/shop/Header";
 import { Footer } from "@/components/shop/Footer";
 import { WhatsAppButton } from "@/components/shop/WhatsAppButton";
@@ -8,6 +9,7 @@ export default async function ShopLayout({ children }: { children: React.ReactNo
 
   return (
     <div className="flex min-h-dvh flex-col">
+      <AnnouncementBar />
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
