@@ -9,6 +9,23 @@ const nextConfig: NextConfig = {
    * which is how a client ends up looking at last week's shop and thinking
    * nothing shipped. Build assets keep their immutable caching.
    */
+  /**
+   * The shop traded as Kagorim before it traded as Bello Beauty, and the old
+   * address is still attached to the project and still shared around. Rather
+   * than detach it — which frees the name for anyone to claim — it is sent on
+   * to the new one, path and all, permanently.
+   */
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host" as const, value: "kagorim-boutique.vercel.app" }],
+        destination: "https://bellobeauty.vercel.app/:path*",
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {
