@@ -72,7 +72,7 @@ export const WIG_TYPE_PHOTOS: Record<string, string> = {
 };
 
 /** Landing page lead image — the shop's own packaging. */
-export const HERO_PHOTO = "/brand/hero-bags.webp";
+export const HERO_PHOTO = "/brand/hero-bag.webp";
 
 export function photosFor(slug: string): string[] {
   return PRODUCT_PHOTOS[slug] ?? [];

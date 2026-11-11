@@ -148,13 +148,8 @@ export default async function HomePage() {
                 every Bello Babe.
               </span>
             </h1>
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-muted">
-              {settings.tagline} Pay with M-Pesa, get a tracking code on the spot, and watch your
-              parcel move from packed to delivered.
-            </p>
-
             {/* Search is the fastest route to a specific piece. */}
-            <form action="/shop" className="mt-7 flex max-w-lg gap-2">
+            <form action="/shop" className="mt-8 flex max-w-lg gap-2">
               <div className="relative flex-1">
                 <Search size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle" />
                 <input
@@ -200,7 +195,7 @@ export default async function HomePage() {
                 alt={`${settings.storeName} packaging`}
                 fetchPriority="high"
                 decoding="async"
-                className="aspect-[4/5] w-full object-cover sm:aspect-[5/4] lg:aspect-[4/5]"
+                className="aspect-[5/4] w-full object-cover"
               />
             </div>
           </div>

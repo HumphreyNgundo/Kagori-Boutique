@@ -66,7 +66,6 @@ export async function Footer() {
             <li><Link href="/track" className="transition hover:text-brand">Track an order</Link></li>
             <li><Link href="/account" className="transition hover:text-brand">My orders</Link></li>
             <li><Link href="/cart" className="transition hover:text-brand">Basket</Link></li>
-            <li><Link href="/help" className="transition hover:text-brand">Delivery & returns</Link></li>
           </ul>
         </div>
 
